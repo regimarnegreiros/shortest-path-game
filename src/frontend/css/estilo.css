@@ -1,0 +1,83 @@
+.play-body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+    justify-content: center;   /*eixo horizontal*/
+    align-items: center;       /*eixo vertical*/
+    height: 100vh;             /*vh = viewport height*/
+   background-image: url('../images/naruto_background.png');
+   background-size:cover ;
+   text-align: center;
+}
+
+.game-body {
+
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+    justify-content: center;
+    
+    height: 100vh;
+    background-image: url('../images/naruto_background.png');
+    background-size:cover ;
+    text-align: center;
+
+
+}
+
+.container {
+    background-color: rgb(255, 255, 255);
+    padding: 30px 40px;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+h1 {
+    color: #FF7F50; 
+}
+
+
+.regras {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    text-align: left;
+    line-height: 1.6;
+}
+
+/* link  botão */
+.botao-play {
+    display: inline-block;
+    background-color: #FF7F50;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none; /* Remove o sublinhado do link */
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.5s ease; 
+}
+
+
+.botao-play:hover {
+    background-color: #e66a3d;
+}
+
+/* Div pro blocking das páginas*/
+.div-Teste {
+
+    background-color: #3d64e6;
+    width: 50%;
+}
+
+.char-display {
+
+    background-color: #f0f4f8;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: 100px;
+    width: 100px;
+}
