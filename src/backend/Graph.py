@@ -197,33 +197,14 @@ class CharacterGraph:
                                     key=lambda item: item[1], reverse=True)
 
         # Pega os top_n primeiros
-        top_connections = sorted_connections[:top_n]
+        top_connections = sorted_connections[:min(top_n,
+                                                  len(sorted_connections))]
 
         print(f"\n--- As {top_n} principais conexões de {target_character} ---")
         for i, (character, weight) in enumerate(top_connections, 1):
             print(f"{i}. {character} (Peso Total da Relação: {weight})")
 
         return top_connections
-    
-    def options(self, current: Character, k: int = 5) -> list[Character] | list:
-        """Retorna até 5 personagens vizinhos ao atual"""
-        neighbors: list | None = (self.get_top_connections(
-                                      target_character=current.nome,
-                                      top_n=k))
-        if not neighbors:
-            return list()
-
-        neighbors = [neighbor[0] for neighbor in neighbors]
-        nodes: dict[str, dict] = dict(self.graph.nodes(data=True))
-        nodes = {node: nodes[node] for node in nodes if node in neighbors}
-        characters: list[Character] = list()
-
-        for node in nodes:
-            data: dict = nodes[node]
-            characters.append(Character(
-                              data["id"], data["name"], data["images"]))
-
-        return characters
 
     def rand_chars(self, k: int = 1) -> list[Character]:
         """

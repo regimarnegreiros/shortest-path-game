@@ -1,7 +1,7 @@
 import os
 from Graph import CharacterGraph
 from Character import Character
-from random import choices
+from random import shuffle
 
 class Game:
     def __init__(self, graph: CharacterGraph, max_choices: int = None):
@@ -30,6 +30,37 @@ class Game:
             raise RuntimeError("Número máximo de escolhas atingido.")
         self.choices_count += 1
         pass
+
+    def options(self, k: int = 5, max_c: int = 10) -> list[Character] | list:
+        """Retorna até `k` de `max_c` personagens vizinhos ao atual"""
+        if k > max_c:
+            return list()
+
+        neighbors: list | None = (self.cgraph.get_top_connections(
+                                      target_character=self.current.nome,
+                                      top_n=max_c))
+        if not neighbors:
+            return list()
+
+        neighbors = [neighbor[0] for neighbor in neighbors]
+        nodes: dict[str, dict] = dict(self.cgraph.graph.nodes(data=True))
+        nodes = {node: nodes[node] for node in nodes if node in neighbors}
+        characters: list[Character] = list()
+
+        for node in nodes:
+            data: dict = nodes[node]
+            characters.append(Character(
+                              data["id"], data["name"], data["images"]))
+
+        if self.destination in characters:
+            characters = characters[:(k - 1)] + [self.destination]
+        else:
+            characters = characters[:k]
+
+        shuffle(characters)
+
+        return characters
+
 
 # Inicializa a classe com o arquivo JSON
 BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
