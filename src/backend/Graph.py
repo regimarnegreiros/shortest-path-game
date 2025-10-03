@@ -4,7 +4,7 @@ import networkx as nx
 from typing import Any
 from Character import Character
 from networkx.readwrite.gml import read_gml
-from random import choice
+from random import choices
 
 def to_list(value) -> list:
     """Função auxiliar para garantir que o valor seja sempre uma lista."""
@@ -43,12 +43,15 @@ class CharacterGraph:
     def __build_graph(self):
         """Constrói o grafo de personagens e suas relações ponderadas."""
         # Adiciona nós
-        for character in self.characters_data:
-            # Checa se personagem estreou no Boruto
-            anime_debut: str = character.get('debut', {}).get('anime', '')
 
-            if not anime_debut.startswith('Boruto') and "name" in character:
-                self.graph.add_node(
+        # Checa se personagem estreou no Boruto
+        self.characters_data = [
+            character for character in self.characters_data
+            if "Boruto" not in (character.get('debut', {}).get('anime', ''))
+            and "name" in character
+        ]
+        for character in self.characters_data:
+            self.graph.add_node(
                     character['name'], id=character["id"],
                     images=character["images"]
                 )
@@ -201,6 +204,44 @@ class CharacterGraph:
             print(f"{i}. {character} (Peso Total da Relação: {weight})")
 
         return top_connections
+    
+    def options(self, current: Character, k: int = 5) -> list[Character] | list:
+        """Retorna até 5 personagens vizinhos ao atual"""
+        neighbors: list | None = (self.get_top_connections(
+                                      target_character=current.nome,
+                                      top_n=k))
+        if not neighbors:
+            return list()
+
+        neighbors = [neighbor[0] for neighbor in neighbors]
+        nodes: dict[str, dict] = dict(self.graph.nodes(data=True))
+        nodes = {node: nodes[node] for node in nodes if node in neighbors}
+        characters: list[Character] = list()
+
+        for node in nodes:
+            data: dict = nodes[node]
+            characters.append(Character(
+                              data["id"], data["name"], data["images"]))
+
+        return characters
+
+    def rand_chars(self, k: int = 1) -> list[Character]:
+        """
+        Retorna um ou mais personagens aleatórios
+        """
+
+        nodes: dict[str, dict] = dict(self.graph.nodes(data=True))
+        rand_char: dict = dict(choices(list(nodes.items()), k=k))
+        ret: list[Character] = [Character(val["id"], key, val["images"])
+                                for (key, val) in rand_char.items()]
+
+        return ret
+
+    def to_char(self, id_name: int | str) -> Character | None:
+        ...
+    
+    def distance(self, char1: str, char2: str) -> Character | None:
+        ...
 
 
 if __name__ == "__main__":
@@ -216,4 +257,4 @@ if __name__ == "__main__":
     character_graph.save_graph(graph_path)
 
     # Exemplo: Obtém as 10 principais conexões de um personagem
-    character_graph.get_top_connections('Gaara')
+    character_graph.get_top_connections('Kabuto Yakushi')

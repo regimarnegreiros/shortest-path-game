@@ -20,25 +20,6 @@ class Game:
         """Define e retorna o personagem de destino"""
         pass
 
-    def options(self) -> list[Character] | list:
-        """Retorna até 5 personagens vizinhos ao atual"""
-        neighbors: list | None = (self.cgraph.get_top_connections(
-                                      target_character=self.current, top_n=5))
-        if not neighbors:
-            return list()
-
-        neighbors = [neighbor[0] for neighbor in neighbors]
-        nodes: dict[str, dict] = dict(self.cgraph.graph.nodes(data=True))
-        nodes = {node: nodes[node] for node in nodes if node in neighbors}
-        characters: list[Character] = list()
-
-        for node in nodes:
-            data: dict = nodes[node]
-            characters.append(Character(
-                              data["id"], data["name"], data["images"]))
-
-        return characters
-
     def choose(self, id: int) -> bool:
         """
         Atualiza o personagem atual.
@@ -49,18 +30,6 @@ class Game:
             raise RuntimeError("Número máximo de escolhas atingido.")
         self.choices_count += 1
         pass
-
-    def rand_chars(self, k: int = 1) -> list[Character]:
-        """
-        Retorna um ou mais personagens aleatórios
-        """
-
-        nodes: dict[str, dict] = dict(self.cgraph.graph.nodes(data=True))
-        rand_char: dict = dict(choices(list(nodes.items()), k=k))
-        ret: list[Character] = [Character(val["id"], key, val["images"])
-                                for (key, val) in rand_char.items()]
-
-        return ret
 
 # Inicializa a classe com o arquivo JSON
 BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
