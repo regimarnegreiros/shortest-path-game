@@ -5,6 +5,7 @@ from typing import Any
 from Character import Character
 from networkx.readwrite.gml import read_gml
 from random import choices
+from sys import stderr
 
 def to_list(value) -> list:
     """Função auxiliar para garantir que o valor seja sempre uma lista."""
@@ -37,7 +38,8 @@ class CharacterGraph:
             with open(self.json_file, 'r', encoding='utf-8') as f:
                 return json.load(f)
         except FileNotFoundError:
-            print(f"Erro: O arquivo '{self.json_file}' não foi encontrado.")
+            print(f"Erro: O arquivo '{self.json_file}' não foi encontrado.",
+                  file=stderr)
             exit()
 
     def __build_graph(self):
@@ -176,14 +178,12 @@ class CharacterGraph:
     def save_graph(self, filename: str) -> None:
         """Salva o grafo ponderado em um arquivo GML."""
         nx.write_gml(self.graph, filename)
-        print(f"Grafo ponderado criado e salvo como '{filename}'")
-        print(f"O grafo tem {self.graph.number_of_nodes()} nós (personagens) "
-              f"e {self.graph.number_of_edges()} arestas (relações).")
 
     def get_top_connections(self, target_character, top_n=10) -> list | None:
         """Encontra e lista as principais conexões de um personagem."""
         if not self.graph.has_node(target_character):
-            print(f"\nPersonagem '{target_character}' não encontrado no grafo.")
+            print(f"\nPersonagem '{target_character}' não encontrado no grafo.",
+                  file=stderr)
             return None
 
         character_connections: list = []
@@ -199,10 +199,6 @@ class CharacterGraph:
         # Pega os top_n primeiros
         top_connections = sorted_connections[:min(top_n,
                                                   len(sorted_connections))]
-
-        print(f"\n--- As {top_n} principais conexões de {target_character} ---")
-        for i, (character, weight) in enumerate(top_connections, 1):
-            print(f"{i}. {character} (Peso Total da Relação: {weight})")
 
         return top_connections
 
