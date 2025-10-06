@@ -3,11 +3,11 @@ from dataclasses import dataclass
 @dataclass
 class Character:
     id: int
-    nome: str
-    imagem: list[str]
+    name: str
+    images: list[str]
 
     def __str__(self):
-        return self.nome
+        return self.name
     
     def __repr__(self):
-        return self.nome
+        return self.name

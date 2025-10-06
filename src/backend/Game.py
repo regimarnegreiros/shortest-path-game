@@ -26,7 +26,7 @@ class Game:
         """Define e retorna o personagem de destino"""
         while True:
             destination = self.cgraph.rand_chars(k=1)[0]
-            if destination.nome != self.initial.nome:
+            if destination.name != self.initial.name:
                 return destination
 
     def check_end_game(self) -> None:
@@ -34,7 +34,7 @@ class Game:
         Verifica se o jogo terminou (vitória ou derrota) e atualiza os estados.
         Retorna True se o jogo acabou, False caso contrário.
         """
-        if self.current.nome == self.destination.nome:
+        if self.current.name == self.destination.name:
             # Condição de VITÓRIA
             self.game_over = True
             self.win = True
@@ -63,7 +63,7 @@ class Game:
             return list()
 
         neighbors: list | None = (self.cgraph.get_top_connections(
-                                      target_character=self.current.nome,
+                                      target_character=self.current.name,
                                       top_n=max_c))
         if not neighbors:
             return list()
@@ -76,7 +76,7 @@ class Game:
         for node in nodes:
             data: dict = nodes[node]
             characters.append(Character(
-                              data["id"], data["name"], data["images"]))
+                              data["id"], node, data["images"]))
 
         if self.destination in characters:
             characters = characters[:(k - 1)] + [self.destination]
