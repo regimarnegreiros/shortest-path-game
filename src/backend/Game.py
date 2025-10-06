@@ -1,5 +1,5 @@
 import os
-from Graph import CharacterGraph
+from Graph import CharacterGraph, NARUTO_WEIGHTS
 from Character import Character
 from random import shuffle
 
@@ -26,26 +26,26 @@ class Game:
         """Define e retorna o personagem de destino"""
         while True:
             destination = self.cgraph.rand_chars(k=1)[0]
-            if destination.name != self.initial.name:
+            if destination != self.initial:
                 return destination
 
-    def check_end_game(self) -> None:
+    def check_end_game(self) -> bool:
         """
         Verifica se o jogo terminou (vitória ou derrota) e atualiza os estados.
         Retorna True se o jogo acabou, False caso contrário.
         """
-        if self.current.name == self.destination.name:
+        if self.current == self.destination:
             # Condição de VITÓRIA
-            self.game_over = True
-            self.win = True
+            self.game_over = self.win = True
             self.loss = False
 
         elif (self.max_choices is not None and 
               self.choices_count >= self.max_choices):
             # Condição de DERROTA por limite de escolhas
-            self.game_over = True
-            self.loss = True
+            self.game_over = self.loss = True
             self.win = False
+
+        return self.game_over
 
     def choose(self, id: int) -> None:
         """
@@ -91,7 +91,7 @@ class Game:
 # Inicializa a classe com o arquivo JSON
 BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 json_path: str = os.path.join(BASE_DIR, 'data', 'characters.json')
-character_graph: CharacterGraph = CharacterGraph(json_path)
+character_graph: CharacterGraph = CharacterGraph(json_path, NARUTO_WEIGHTS)
 
 # Salva o grafo ponderado
 output_dir: str = os.path.join(BASE_DIR, 'data', 'graph')

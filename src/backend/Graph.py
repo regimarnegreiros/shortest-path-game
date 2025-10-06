@@ -6,6 +6,7 @@ from Character import Character
 from networkx.readwrite.gml import read_gml
 from random import choices
 from sys import stderr
+from abc import ABC, abstractmethod
 
 def to_list(value) -> list:
     """Função auxiliar para garantir que o valor seja sempre uma lista."""
@@ -15,22 +16,13 @@ def to_list(value) -> list:
         return value
     return [value]
 
-class CharacterGraph:
-    def __init__(self, json_file: str):
+class AbstractCharacterGraph(ABC):
+    def __init__(self, json_file: str, weights: dict[str, int]):
         self.json_file: str = json_file
-        self.weights: dict[str, int] = {
-            'family': 3,
-            'clan': 1,
-            'same_primary_team': 5,
-            'share_primary_team': 3,
-            'share_team': 0.5,
-            'anime_debut': 3,
-            'partner': 5,
-            'affiliation': 1,
-        }
+        self.weights: dict[str, int] = weights
         self.graph: nx.Graph = nx.Graph()
         self.characters_data: list[dict[str, Any]] = self.__load_characters()
-        self.__build_graph()
+        self._build_graph()
 
     def __load_characters(self) -> list[dict[str, Any]]:
         """Carrega os dados do arquivo JSON."""
@@ -42,16 +34,100 @@ class CharacterGraph:
                   file=stderr)
             exit()
 
-    def __build_graph(self):
+    @abstractmethod
+    def _build_graph(self) -> None:
         """Constrói o grafo de personagens e suas relações ponderadas."""
-        # Adiciona nós
+        pass
 
+    def save_graph(self, filename: str) -> None:
+        """Salva o grafo ponderado em um arquivo GML."""
+        nx.write_gml(self.graph, filename)
+
+    def get_top_connections(self, target_character, top_n=10) -> list | None:
+        """Encontra e lista as principais conexões de um personagem."""
+        if not self.graph.has_node(target_character):
+            print(f"\nPersonagem '{target_character}' não encontrado no grafo.",
+                  file=stderr)
+            return None
+
+        character_connections: list = []
+        for neighbor in self.graph.neighbors(target_character):
+            edge_data = self.graph.get_edge_data(target_character, neighbor)
+            weight = edge_data.get('weight', 0)
+            character_connections.append((neighbor, weight))
+
+        # Ordena a lista pelo peso em ordem decrescente
+        sorted_connections = sorted(character_connections, 
+                                    key=lambda item: item[1], reverse=True)
+
+        # Pega os top_n primeiros
+        top_connections = sorted_connections[:min(top_n,
+                                                  len(sorted_connections))]
+
+        return top_connections
+
+    def rand_chars(self, k: int = 1) -> list[Character]:
+        """
+        Retorna um ou mais personagens aleatórios
+        """
+
+        nodes: dict[str, dict] = dict(self.graph.nodes(data=True))
+        rand_char: dict = dict(choices(list(nodes.items()), k=k))
+        ret: list[Character] = [Character(val["id"], key, val["images"])
+                                for (key, val) in rand_char.items()]
+
+        return ret
+
+    def to_char(self, id_name: int | str) -> Character | None:
+        """
+        Converte um id ou nome em `Character`
+
+        Args:
+            id_name (int | str):
+                o ID (`int`) ou o nome (`str`) do personagem
+
+        Returns:
+            `Character|None`: `Character`, caso o ID/nome exista no grafo,
+            `None` caso contrário
+
+        Raises:
+            TypeError: Caso `id_name` não seja um `int` ou `str`
+        """
+
+        if not isinstance(id_name, (int, str)):
+            raise TypeError("invalid type for id_name")
+
+        data: dict = dict(self.graph.nodes(data=True))
+
+        if type(id_name) == str:
+            char_data: dict | None = data.get(id_name)
+            if not char_data:
+                return None
+
+            return Character(data["id"], id_name, data["images"])
+        else:
+            for (key, val) in data.items():
+                if val["id"] == id_name:
+                    return Character(id_name, key, val["images"])
+            return None
+
+    def distance(self, char1: int | str,
+                 char2: int | str) -> list[Character] | None:
+        """
+        Retorna a distância entre dois personagens como uma 
+        lista de `Character`, caso haja um caminho entre os 2 personagens
+        """
+        ...
+
+class CharacterGraph(AbstractCharacterGraph):
+    def _build_graph(self):
         # Checa se personagem estreou no Boruto
         self.characters_data = [
             character for character in self.characters_data
             if "Boruto" not in (character.get('debut', {}).get('anime', ''))
             and "name" in character
         ]
+        # Adiciona nós
         for character in self.characters_data:
             self.graph.add_node(
                     character['name'], id=character["id"],
@@ -175,87 +251,23 @@ class CharacterGraph:
                     self.graph.add_edge(name1, name2, relation=relation_label,
                                         weight=total_weight)
 
-    def save_graph(self, filename: str) -> None:
-        """Salva o grafo ponderado em um arquivo GML."""
-        nx.write_gml(self.graph, filename)
-
-    def get_top_connections(self, target_character, top_n=10) -> list | None:
-        """Encontra e lista as principais conexões de um personagem."""
-        if not self.graph.has_node(target_character):
-            print(f"\nPersonagem '{target_character}' não encontrado no grafo.",
-                  file=stderr)
-            return None
-
-        character_connections: list = []
-        for neighbor in self.graph.neighbors(target_character):
-            edge_data = self.graph.get_edge_data(target_character, neighbor)
-            weight = edge_data.get('weight', 0)
-            character_connections.append((neighbor, weight))
-
-        # Ordena a lista pelo peso em ordem decrescente
-        sorted_connections = sorted(character_connections, 
-                                    key=lambda item: item[1], reverse=True)
-
-        # Pega os top_n primeiros
-        top_connections = sorted_connections[:min(top_n,
-                                                  len(sorted_connections))]
-
-        return top_connections
-
-    def rand_chars(self, k: int = 1) -> list[Character]:
-        """
-        Retorna um ou mais personagens aleatórios
-        """
-
-        nodes: dict[str, dict] = dict(self.graph.nodes(data=True))
-        rand_char: dict = dict(choices(list(nodes.items()), k=k))
-        ret: list[Character] = [Character(val["id"], key, val["images"])
-                                for (key, val) in rand_char.items()]
-
-        return ret
-
-    def to_char(self, id_name: int | str) -> Character | None:
-        """
-        Converte um id ou nome em `Character`
-
-        Args:
-            id_name (int | str):
-                o ID (`int`) ou o nome (`str`) do personagem
-
-        Returns:
-            `Character|None`: `Character`, caso o ID/nome exista no grafo,
-            `None` caso contrário
-
-        Raises:
-            TypeError: Caso `id_name` não seja um `int` ou `str`
-        """
-
-        if not isinstance(id_name, (int, str)):
-            raise TypeError("invalid type for id_name")
-
-        data: dict = dict(self.graph.nodes(data=True))
-
-        if type(id_name) == str:
-            char_data: dict | None = data.get(id_name)
-            if not char_data:
-                return None
-
-            return Character(data["id"], id_name, data["images"])
-        else:
-            for (key, val) in data.items():
-                if val["id"] == id_name:
-                    return Character(id_name, key, val["images"])
-            return None
-
-    def distance(self, char1: str, char2: str) -> Character | None:
-        ...
+NARUTO_WEIGHTS: dict[str, int] = {
+    'family': 3,
+    'clan': 1,
+    'same_primary_team': 5,
+    'share_primary_team': 3,
+    'share_team': 0.5,
+    'anime_debut': 3,
+    'partner': 5,
+    'affiliation': 1,
+}
 
 
 if __name__ == "__main__":
     # Inicializa a classe com o arquivo JSON
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     json_path = os.path.join(BASE_DIR, 'data', 'characters.json')
-    character_graph = CharacterGraph(json_path)
+    character_graph = CharacterGraph(json_path, NARUTO_WEIGHTS)
 
     # Salva o grafo ponderado
     output_dir = os.path.join(BASE_DIR, 'data', 'graph')
