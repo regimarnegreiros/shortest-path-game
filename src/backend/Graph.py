@@ -215,9 +215,24 @@ class CharacterGraph:
         return ret
 
     def to_char(self, id_name: int | str) -> Character | None:
+        """
+        Converte um id ou nome em `Character`
+
+        Args:
+            id_name (int | str):
+                o ID (`int`) ou o nome (`str`) do personagem
+
+        Returns:
+            `Character|None`: `Character`, caso o ID/nome exista no grafo,
+            `None` caso contrário
+
+        Raises:
+            TypeError: Caso `id_name` não seja um `int` ou `str`
+        """
+
         if not isinstance(id_name, (int, str)):
             raise TypeError("invalid type for id_name")
-        
+
         data: dict = dict(self.graph.nodes(data=True))
 
         if type(id_name) == str:
@@ -227,7 +242,7 @@ class CharacterGraph:
 
             return Character(data["id"], id_name, data["images"])
         else:
-            for (key, val) in data.values():
+            for (key, val) in data.items():
                 if val["id"] == id_name:
                     return Character(id_name, key, val["images"])
             return None

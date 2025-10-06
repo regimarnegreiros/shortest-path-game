@@ -6,14 +6,14 @@ from random import shuffle
 class Game:
     def __init__(self, graph: CharacterGraph, max_choices: int = None):
         self.cgraph: CharacterGraph = graph
-        
+
         self.initial: Character = self.set_initial()
         self.current: Character = self.initial
         self.destination: Character = self.set_destination()
 
         self.choices_count: int = 0
         self.max_choices: int | None = max_choices  # None = ilimitado
-        
+
         self.game_over: bool = False
         self.win: bool = False
         self.loss: bool = False
@@ -39,14 +39,14 @@ class Game:
             self.game_over = True
             self.win = True
             self.loss = False
-        
+
         elif (self.max_choices is not None and 
               self.choices_count >= self.max_choices):
             # Condição de DERROTA por limite de escolhas
             self.game_over = True
             self.loss = True
             self.win = False
-    
+
     def choose(self, id: int) -> None:
         """
         Atualiza o personagem atual.
