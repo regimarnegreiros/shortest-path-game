@@ -107,13 +107,13 @@ def choose_character():
 
     except RuntimeError as e:
         # Erro se tentar jogar após o fim (exceção levantada em Game.choose)
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"runtime error": str(e)}), 400
     except ValueError as e:
         # Erro de personagem não encontrado (exceção levantada em Game.choose)
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"value error": str(e)}), 400
     except TypeError as e:
         # Erro de tipo
-        return jsonify({"error": str(e)}), 400
+        return jsonify({"type error": str(e)}), 400
 
 @app.route("/status", methods=["GET"])
 def get_status():
