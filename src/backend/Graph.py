@@ -219,8 +219,23 @@ class CharacterGraph:
         return ret
 
     def to_char(self, id_name: int | str) -> Character | None:
-        ...
-    
+        if not isinstance(id_name, (int, str)):
+            raise TypeError("invalid type for id_name")
+        
+        data: dict = dict(self.graph.nodes(data=True))
+
+        if type(id_name) == str:
+            char_data: dict | None = data.get(id_name)
+            if not char_data:
+                return None
+
+            return Character(data["id"], id_name, data["images"])
+        else:
+            for (key, val) in data.values():
+                if val["id"] == id_name:
+                    return Character(id_name, key, val["images"])
+            return None
+
     def distance(self, char1: str, char2: str) -> Character | None:
         ...
 

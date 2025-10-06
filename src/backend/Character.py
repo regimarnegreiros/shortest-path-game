@@ -4,7 +4,7 @@ from dataclasses import dataclass
 class Character:
     id: int
     nome: str
-    imagem: str
+    imagem: list[str]
 
     def __str__(self):
         return self.nome
