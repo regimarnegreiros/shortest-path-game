@@ -6,30 +6,56 @@ from random import shuffle
 class Game:
     def __init__(self, graph: CharacterGraph, max_choices: int = None):
         self.cgraph: CharacterGraph = graph
+        
         self.initial: Character = self.set_initial()
         self.current: Character = self.initial
         self.destination: Character = self.set_destination()
+
         self.choices_count: int = 0
         self.max_choices: int | None = max_choices  # None = ilimitado
+        
+        self.game_over: bool = False
+        self.win: bool = False
+        self.loss: bool = False
 
     def set_initial(self) -> Character:
         """Define e retorna o personagem inicial"""
-        pass
+        return self.cgraph.rand_chars(k=1)[0]
 
     def set_destination(self) -> Character:
         """Define e retorna o personagem de destino"""
-        pass
+        while True:
+            destination = self.cgraph.rand_chars(k=1)[0]
+            if destination.nome != self.initial.nome:
+                return destination
 
-    def choose(self, id: int) -> bool:
+    def check_end_game(self) -> None:
+        """
+        Verifica se o jogo terminou (vitória ou derrota) e atualiza os estados.
+        Retorna True se o jogo acabou, False caso contrário.
+        """
+        if self.current.nome == self.destination.nome:
+            # Condição de VITÓRIA
+            self.game_over = True
+            self.win = True
+            self.loss = False
+        
+        elif (self.max_choices is not None and 
+              self.choices_count >= self.max_choices):
+            # Condição de DERROTA por limite de escolhas
+            self.game_over = True
+            self.loss = True
+            self.win = False
+    
+    def choose(self, id: int) -> None:
         """
         Atualiza o personagem atual.
+        Verifica se o jogo terminou.
         Incrementa contador de escolhas.
-        Retorna True se chegou ao destino, senão False.
         """
-        if self.max_choices is not None and self.choices_count >= self.max_choices:
-            raise RuntimeError("Número máximo de escolhas atingido.")
+        self.current = self.cgraph.to_char(id)
         self.choices_count += 1
-        pass
+        self.check_end_game()
 
     def options(self, k: int = 5, max_c: int = 10) -> list[Character] | list:
         """Retorna até `k` de `max_c` personagens vizinhos ao atual"""
@@ -72,5 +98,3 @@ output_dir: str = os.path.join(BASE_DIR, 'data', 'graph')
 os.makedirs(output_dir, exist_ok=True)
 graph_path: str = os.path.join(output_dir, 'naruto_relationships.gml')
 character_graph.save_graph(graph_path)
-
-game_instance: Game = Game(character_graph)
