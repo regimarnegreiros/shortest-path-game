@@ -1,0 +1,160 @@
+.play-body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+    justify-content: center;   /*eixo horizontal*/
+    align-items: center;       /*eixo vertical*/
+    height: 100vh;             /*vh = viewport height*/
+    background-image: url('../images/naruto_background.png');
+    background-size:cover ;
+   text-align: center;
+   overflow: hidden
+}
+
+.game-body {
+
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    height: 100vh;
+    background-image: url('../images/naruto_background.png');
+    background-size:cover ;
+    overflow: hidden
+
+
+}
+
+.container {
+    background-color: rgb(255, 255, 255);
+    padding: 30px 40px;
+
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+
+h1 {
+    color: #FF7F50; 
+}
+
+
+.regras {
+    margin-top: 20px;
+    margin-bottom: 30px;
+    text-align: left;
+    line-height: 1.6;
+}
+
+/* link  botão */
+.botao-play {
+    display: inline-block;
+    background-color: #FF7F50;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none; /* Remove o sublinhado do link */
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.5s ease; 
+}
+
+
+.botao-play:hover {
+    background-color: #e66a3d;
+}
+
+/* Div pro blocking das páginas*/
+.div-Teste {
+    display: flex;
+    justify-content: space-between;
+    background-color: #3d64e6;
+    min-width: 50%;
+    margin-top: 5%;
+}
+
+.div-Teste-options {
+    
+    justify-content:space-between;
+    min-width: 30%;
+    margin-top: 0;
+ 
+}
+
+.char-display {
+
+    display: flex;
+    background-color: #f0f4f8;
+    border-radius: 50%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    height: 150px;
+    width: 150px;
+    border: 2px solid #000000;
+    align-items: center;
+    justify-content: center;
+    
+}
+.char-display img {
+
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    
+}
+
+.char-display p {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    padding: 5px; 
+    text-align: center;
+}
+
+.char-display-options {
+
+    height: 130px;
+    width: 130px;
+    margin-left:-15px ;
+    margin-right:-15px ;
+    flex-direction: row;
+    z-index: 1;
+    transition: all 0.5s ease;
+    border: 1px solid #000000;
+}
+
+.char-display-options:hover {
+
+    flex-direction: row;
+    z-index: 2;
+    scale: 1.3;
+}
+
+
+.perga-container {
+    min-width: 55%;
+    min-height:20% ;
+    background-color: rgb(224, 152, 104);  
+    display: flex;             
+    justify-content: center;   
+    margin-top: 2%;
+    align-items: center;
+    transition: all  0.6s ease;
+    transform-origin: center;
+  
+}
+.perga-container.fecha{
+    transform: scaleX(0);
+   
+    
+}
+.perga-container.open{
+    transform: scaleX(1);
+    
+    
+}
+
