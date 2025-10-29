@@ -1,13 +1,10 @@
-from flask import Flask, jsonify, request, session
+from flask import Flask, jsonify, request, session, Blueprint
 from Game import Game, character_graph
 import uuid
 import os
 
 
-app = Flask(__name__)
-
-# Chave secreta OBRIGATÓRIA para usar sessions (cookies seguros)
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', str(uuid.uuid4())) 
+api_bp = Blueprint('api_bp', __name__)
 
 # Armazenamento simples no backend para todas as instâncias de jogo.
 ACTIVE_GAMES: dict[str, Game] = {}
@@ -39,7 +36,14 @@ def _get_game_status_data(game: Game, game_id: str) -> dict:
         "loss": game.loss
     }
 
-@app.route("/start", methods=["POST"])
+@api_bp.before_request
+def restrict_origin():
+    allowed_origins = ["http://localhost:5000"]
+    origin = request.headers.get("Origin")
+    if origin and origin not in allowed_origins:
+        return jsonify({"error": "Origem não autorizada"}), 403
+
+@api_bp.route("/start", methods=["POST"])
 def start_game():
     """
     Inicia um novo jogo.
@@ -60,7 +64,7 @@ def start_game():
 
     return jsonify(_get_game_status_data(new_game, game_id))
 
-@app.route("/options", methods=["GET"])
+@api_bp.route("/options", methods=["GET"])
 def get_options():
     """Retorna até 5 personagens vizinhos do atual"""
     game = get_current_game()
@@ -75,7 +79,7 @@ def get_options():
     return jsonify([vars(opt) for opt in options])
 
 
-@app.route("/choose", methods=["POST"])
+@api_bp.route("/choose", methods=["POST"])
 def choose_character():
     """
     Processa a escolha do próximo personagem, atualiza o estado e limpa o jogo se game_over for True.
@@ -115,7 +119,7 @@ def choose_character():
         # Erro de tipo
         return jsonify({"type error": str(e)}), 400
 
-@app.route("/status", methods=["GET"])
+@api_bp.route("/status", methods=["GET"])
 def get_status():
     """Retorna informações do jogo atual"""
     game = get_current_game()
@@ -126,6 +130,3 @@ def get_status():
     
     return jsonify(_get_game_status_data(game, game_id))
 
-
-if __name__ == "__main__":
-    app.run(debug=True)
