@@ -6,9 +6,6 @@ import os
 
 api_bp = Blueprint('api_bp', __name__)
 
-# # Chave secreta OBRIGATÓRIA para usar sessions (cookies seguros)
-# app.secret_key = os.environ.get('FLASK_SECRET_KEY', str(uuid.uuid4())) 
-
 # Armazenamento simples no backend para todas as instâncias de jogo.
 ACTIVE_GAMES: dict[str, Game] = {}
 
@@ -133,6 +130,3 @@ def get_status():
     
     return jsonify(_get_game_status_data(game, game_id))
 
-
-# if __name__ == "__main__":
-#     app.run(debug=True)
