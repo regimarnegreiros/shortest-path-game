@@ -16,6 +16,9 @@ def to_list(value) -> list:
         return value
     return [value]
 
+def minmax_comp(x: int, xmin: int, xmax: int) -> float:
+    return 1 - ((x - xmin) / (xmax - xmin))
+
 class AbstractCharacterGraph(ABC):
     def __init__(self, json_file: str, weights: dict[str, int]):
         self.json_file: str = json_file
@@ -23,6 +26,7 @@ class AbstractCharacterGraph(ABC):
         self.graph: nx.Graph = nx.Graph()
         self.characters_data: list[dict[str, Any]] = self.__load_characters()
         self._build_graph()
+        self.__normalize_graph()
 
     def __load_characters(self) -> list[dict[str, Any]]:
         """Carrega os dados do arquivo JSON."""
@@ -38,6 +42,17 @@ class AbstractCharacterGraph(ABC):
     def _build_graph(self) -> None:
         """Constrói o grafo de personagens e suas relações ponderadas."""
         pass
+
+    def __normalize_graph(self) -> None:
+        weights: list[int] = [data[-1]["weight"] for data
+                              in self.graph.edges(data=True)]
+        min_weight: int = min(weights)
+        max_weight: int = max(weights)
+        
+        for (*edge, data) in self.graph.edges(data=True):
+            self.graph.edges[*edge]["weight"] = minmax_comp(
+                x=data["weight"], xmin=min_weight, xmax=max_weight
+            )
 
     def save_graph(self, filename: str) -> None:
         """Salva o grafo ponderado em um arquivo GML."""
@@ -277,3 +292,4 @@ if __name__ == "__main__":
 
     # Exemplo: Obtém as 10 principais conexões de um personagem
     character_graph.get_top_connections('Kabuto Yakushi')
+    print(character_graph.graph.edges["Naruto Uzumaki", "Minato Namikaze"])
