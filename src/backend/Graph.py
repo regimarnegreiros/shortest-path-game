@@ -73,7 +73,7 @@ class AbstractCharacterGraph(ABC):
 
         # Ordena a lista pelo peso em ordem decrescente
         sorted_connections = sorted(character_connections, 
-                                    key=lambda item: item[1], reverse=True)
+                                    key=lambda item: item[1])
 
         # Pega os top_n primeiros
         top_connections = sorted_connections[:min(top_n,
@@ -291,5 +291,7 @@ if __name__ == "__main__":
     character_graph.save_graph(graph_path)
 
     # Exemplo: Obtém as 10 principais conexões de um personagem
-    character_graph.get_top_connections('Kabuto Yakushi')
-    print(character_graph.graph.edges["Naruto Uzumaki", "Minato Namikaze"])
+    top = character_graph.get_top_connections('Kabuto Yakushi')
+
+    for i, (name, score) in enumerate(top, start=1):
+        print(f"{i:2}. {name:<20} {score:.3f}")
