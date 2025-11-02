@@ -1,0 +1,114 @@
+@font-face {
+  font-family: 'naruto';
+  src: url('../fonts/ninja_naruto/njnaruto.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'sans_undertale';
+  src: url('../fonts/qd-better-comic-sans-font/Qdbettercomicsans-jEEeG.ttf') format('truetype');
+}
+
+/*==================================================================*/
+/*CSS DO INDEX.HTML // PAGINA INICIAL*/
+/*==================================================================*/
+
+.play-body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+    color: #333;
+    display: flex;
+    justify-content: center;   /*eixo horizontal*/
+    align-items: center;       /*eixo vertical*/
+    height: 100vh;             /*vh = viewport height*/
+   background-image: url('../images/naruto_background.png');
+   background-size:cover ;
+   text-align: center;
+   overflow: hidden
+}
+
+.container {
+    padding: 30px 40px;
+
+}
+
+.titulo-maneiro {
+    color: #ff6200; 
+    font-family: 'naruto';
+    font-size: 60px;
+    text-shadow:
+        -2px -2px 0 white,
+        2px -2px 0 white,
+        -2px  2px 0 white,
+        2px  2px 0 white,   
+        -4px -4px 0 rgb(0, 0, 0),
+        4px -4px 0 rgb(0, 0, 0),
+        -4px  4px 0 rgb(0, 0, 0),
+        4px  4px 0 rgb(0, 0, 0),
+        6px  6px 0px rgb(6, 0, 111),
+        8px  0px 0px rgb(6, 0, 111),
+        0px  0px 30px rgb(0, 13, 100);
+
+        padding: 40px 40px;
+        
+    border-radius: 10px;
+   
+}
+
+.regras-titulo {
+    font-family: 'naruto' ;
+    font-size: 35px;
+    text-align: center;
+}
+
+.regras {
+    background-color: #e1dcc6;
+
+    border: 
+        12px solid #7a291f;
+
+
+    padding: 20px 27px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+    font-family: 'sans_undertale';
+    font-size: 20px;
+
+    margin-top: 20px;
+    margin-bottom: 30px;
+    text-align: left;
+    line-height: 1.6;
+
+}
+.regras-explicacao{
+    font-family: 'sans_undertale';
+    font-size: 25px;
+    text-align: center;
+}
+
+.regras-subcontainer{
+    font-family: 'sans_undertale';
+    justify-content: center;
+}
+
+.regras-regras-individuais{
+    color: #020202;
+    font-family: 'sans_undertale';
+    text-align: center;
+}
+/* link  botão */
+.botao-play {
+    display: inline-block;
+    background-color: #FF7F50;
+    color: white;
+    padding: 15px 30px;
+    text-decoration: none; /* Remove o sublinhado do link */
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.5s ease; 
+}
+
+
+.botao-play:hover {
+    background-color: #e66a3d;
+}
