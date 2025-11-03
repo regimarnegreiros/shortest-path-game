@@ -7,6 +7,7 @@ from networkx.readwrite.gml import read_gml
 from random import choices
 from sys import stderr
 from abc import ABC, abstractmethod
+from math import inf
 
 def to_list(value) -> list:
     """Função auxiliar para garantir que o valor seja sempre uma lista."""
@@ -48,7 +49,7 @@ class AbstractCharacterGraph(ABC):
                               in self.graph.edges(data=True)]
         min_weight: int = min(weights)
         max_weight: int = max(weights)
-        
+
         for (*edge, data) in self.graph.edges(data=True):
             self.graph.edges[*edge]["weight"] = minmax_comp(
                 x=data["weight"], xmin=min_weight, xmax=max_weight
@@ -119,7 +120,7 @@ class AbstractCharacterGraph(ABC):
             if not char_data:
                 return None
 
-            return Character(data["id"], id_name, data["images"])
+            return Character(char_data["id"], id_name, char_data["images"])
         else:
             for (key, val) in data.items():
                 if val["id"] == id_name:
@@ -127,12 +128,62 @@ class AbstractCharacterGraph(ABC):
             return None
 
     def distance(self, char1: int | str,
-                 char2: int | str) -> list[Character] | None:
+                 char2: int | str) -> tuple[Character] | None:
         """
         Retorna a distância entre dois personagens como uma 
-        lista de `Character`, caso haja um caminho entre os 2 personagens
+        tuple ordenada de personagens, caso haja um caminho entre eles
         """
-        ...
+
+        type Table = dict[int | str, tuple[float, int | str | None, bool]]
+
+        start: int | str = char1
+        end: int | str = char2
+
+        if not (start and end):
+            return None
+
+        # Tabela: {Nó: (Custo, Antecessor, Visitado)}
+        table: Table = {
+            char: ((inf, None, False) if char != start else (0.0, None, False))
+            for char in self.graph.nodes
+        }
+
+        # Para se chegou no destino ou restam só nós inalcançáveis
+        while (start != end and any(vals[0] != inf for vals in table.values()
+                                    if not vals[2])):
+            min_weight: float = min(vals[0] for vals in table.values()
+                                    if not vals[2] and vals[0] != inf)
+
+            # Acha nó não visitado de menor distância
+            for (char, vals) in table.items():
+                if not vals[2] and vals[0] == min_weight:
+                    start = char
+                    break
+
+            neighbors = self.graph.edges(start, data=True)
+
+            # Dos vizinhos não visitados, checa menor distância
+            for neighbor in neighbors:
+                char: str = neighbor[1]
+                if table[char][2]: continue
+
+                dist: float = table[char][0]
+                proposed_dist: float = table[start][0] + neighbor[2]["weight"]
+
+                if proposed_dist < dist:
+                    table[char] = (proposed_dist, start, table[char][2])
+
+            table[start] = (table[start][0], table[start][1], True)
+
+        if start != end: return None
+
+        path: list[int | str] = []
+
+        while start:
+            path.insert(0, start)
+            start = table[start][1]
+
+        return tuple(path)
 
 class CharacterGraph(AbstractCharacterGraph):
     def _build_graph(self):
@@ -292,6 +343,7 @@ if __name__ == "__main__":
 
     # Exemplo: Obtém as 10 principais conexões de um personagem
     top = character_graph.get_top_connections('Kabuto Yakushi')
+    print(character_graph.distance("Naruto Uzumaki", "Mitsuo"))
 
-    for i, (name, score) in enumerate(top, start=1):
-        print(f"{i:2}. {name:<20} {score:.3f}")
+    # for i, (name, score) in enumerate(top, start=1):
+    #     print(f"{i:2}. {name:<20} {score:.3f}")
