@@ -33,7 +33,8 @@ def _get_game_status_data(game: Game, game_id: str) -> dict:
         "max_choices": game.max_choices,
         "game_over": game.game_over,
         "win": game.win,
-        "loss": game.loss
+        "loss": game.loss,
+        "path": game.path
     }
 
 # @api_bp.before_request
