@@ -3,13 +3,12 @@ import json
 import networkx as nx
 from typing import Any
 from Character import Character
-from networkx.readwrite.gml import read_gml
 from random import choices
 from sys import stderr
 from abc import ABC, abstractmethod
 from math import inf
 
-def to_list(value) -> list:
+def to_list(value: Any) -> list:
     """Função auxiliar para garantir que o valor seja sempre uma lista."""
     if value is None:
         return []
@@ -21,9 +20,9 @@ def minmax_comp(x: int, xmin: int, xmax: int) -> float:
     return 1 - ((x - xmin) / (xmax - xmin))
 
 class AbstractCharacterGraph(ABC):
-    def __init__(self, json_file: str, weights: dict[str, int]):
+    def __init__(self, json_file: str, weights: dict[str, float]):
         self.json_file: str = json_file
-        self.weights: dict[str, int] = weights
+        self.weights: dict[str, float] = weights
         self.graph: nx.Graph = nx.Graph()
         self.characters_data: list[dict[str, Any]] = self.__load_characters()
         self._build_graph()
@@ -42,14 +41,21 @@ class AbstractCharacterGraph(ABC):
     @abstractmethod
     def _build_graph(self) -> None:
         """Constrói o grafo de personagens e suas relações ponderadas."""
+
         pass
 
     def __normalize_graph(self) -> None:
-        weights: list[int] = [data[-1]["weight"] for data
+        """
+        Normaliza os pesos do grafo usando normalização min-max.
+        """
+
+        weights: list[float] = [data[-1]["weight"] for data
                               in self.graph.edges(data=True)]
         min_weight: int = min(weights)
         max_weight: int = max(weights)
 
+        edge: list[Character]
+        data: dict[str, str|float]
         for (*edge, data) in self.graph.edges(data=True):
             self.graph.edges[*edge]["weight"] = minmax_comp(
                 x=data["weight"], xmin=min_weight, xmax=max_weight
@@ -57,28 +63,38 @@ class AbstractCharacterGraph(ABC):
 
     def save_graph(self, filename: str) -> None:
         """Salva o grafo ponderado em um arquivo GML."""
-        nx.write_gml(self.graph, filename)
+        nx.write_gml(self.graph, filename, stringizer=lambda char: str(char))
 
-    def get_top_connections(self, target_character, top_n=10) -> list | None:
+    def get_top_connections(
+            self, target_character: Character | str | int,
+            top_n: int = 10
+        ) -> list[tuple[Character, float]] | None:
         """Encontra e lista as principais conexões de um personagem."""
-        if not self.graph.has_node(target_character):
+        target_character = self.search(target_character)
+
+        if target_character not in self.graph:
             print(f"\nPersonagem '{target_character}' não encontrado no grafo.",
                   file=stderr)
             return None
 
-        character_connections: list = []
+        character_connections: list[tuple[Character, float]] = []
+
+        neighbor: Character
         for neighbor in self.graph.neighbors(target_character):
+            edge_data: dict[str, str | float]
             edge_data = self.graph.get_edge_data(target_character, neighbor)
-            weight = edge_data.get('weight', 0)
+            weight: float = edge_data.get('weight', 0.0)
             character_connections.append((neighbor, weight))
 
         # Ordena a lista pelo peso em ordem decrescente
-        sorted_connections = sorted(character_connections, 
-                                    key=lambda item: item[1])
+        sorted_connections: list[tuple[Character, float]] = (
+            sorted(character_connections, key=lambda item: item[1])
+        )
 
         # Pega os top_n primeiros
-        top_connections = sorted_connections[:min(top_n,
-                                                  len(sorted_connections))]
+        top_connections: list[tuple[Character, float]] = (
+            sorted_connections[:min(top_n, len(sorted_connections))]
+        )
 
         return top_connections
 
@@ -87,59 +103,45 @@ class AbstractCharacterGraph(ABC):
         Retorna um ou mais personagens aleatórios
         """
 
-        nodes: dict[str, dict] = dict(self.graph.nodes(data=True))
-        rand_char: dict = dict(choices(list(nodes.items()), k=k))
-        ret: list[Character] = [Character(val["id"], key, val["images"])
-                                for (key, val) in rand_char.items()]
+        rand_chars: list[Character] = (choices(tuple(self.graph.nodes), k=k))
 
-        return ret
+        return rand_chars
 
-    def to_char(self, id_name: int | str) -> Character | None:
+    def search(self, char: Character | int | str) -> Character | None:
         """
         Converte um id ou nome em `Character`
 
         Args:
-            id_name (int | str):
-                o ID (`int`) ou o nome (`str`) do personagem
+            char (Character |int | str):
+                o ID (`int`) ou nome (`str`) do personagem, ou ele em si
 
         Returns:
-            `Character|None`: `Character`, caso o ID/nome exista no grafo,
+            `Character`: `Character`, caso o personagem exista no grafo,
             `None` caso contrário
 
         Raises:
-            TypeError: Caso `id_name` não seja um `int` ou `str`
+            TypeError: Caso `char` não seja um `int`, `str`, ou `Character`
         """
 
-        if not isinstance(id_name, (int, str)):
-            raise TypeError("invalid type for id_name")
+        if not isinstance(char, (Character, int, str)):
+            raise TypeError("invalid type for char")
 
-        data: dict = dict(self.graph.nodes(data=True))
+        data: tuple = tuple(self.graph.nodes)
 
-        if type(id_name) == str:
-            char_data: dict | None = data.get(id_name)
-            if not char_data:
-                return None
+        if char not in data: return None
 
-            return Character(char_data["id"], id_name, char_data["images"])
-        else:
-            for (key, val) in data.items():
-                if val["id"] == id_name:
-                    return Character(id_name, key, val["images"])
-            return None
+        return data[data.index(char)]
 
-    def distance(self, char1: int | str,
-                 char2: int | str) -> tuple[Character] | None:
+    def distance(self, start: Character | int | str,
+                 end: Character | int | str) -> tuple[Character] | None:
         """
         Retorna a distância entre dois personagens como uma 
         tuple ordenada de personagens, caso haja um caminho entre eles
         """
 
-        type Table = dict[int | str, tuple[float, int | str | None, bool]]
+        type Table = dict[Character, tuple[float, Character | None, bool]]
 
-        start: int | str = char1
-        end: int | str = char2
-
-        if not (start and end):
+        if start in (None, "") or end in (None, ""):
             return None
 
         # Tabela: {Nó: (Custo, Antecessor, Visitado)}
@@ -163,15 +165,16 @@ class AbstractCharacterGraph(ABC):
             neighbors = self.graph.edges(start, data=True)
 
             # Dos vizinhos não visitados, checa menor distância
-            for neighbor in neighbors:
-                char: str = neighbor[1]
-                if table[char][2]: continue
+            edge: tuple[Character, Character, dict[str, str | float]]
+            for edge in neighbors:
+                neighbor: Character = edge[1]
+                if table[neighbor][2]: continue
 
-                dist: float = table[char][0]
-                proposed_dist: float = table[start][0] + neighbor[2]["weight"]
+                dist: float = table[neighbor][0]
+                proposed_dist: float = table[start][0] + edge[2]["weight"]
 
                 if proposed_dist < dist:
-                    table[char] = (proposed_dist, start, table[char][2])
+                    table[neighbor] = (proposed_dist, start, table[neighbor][2])
 
             table[start] = (table[start][0], table[start][1], True)
 
@@ -186,6 +189,20 @@ class AbstractCharacterGraph(ABC):
         return tuple(path)
 
 class CharacterGraph(AbstractCharacterGraph):
+    def __init__(self, json_file):
+        NARUTO_WEIGHTS: dict[str, float] = {
+            'family': 3.0,
+            'clan': 1.0,
+            'same_primary_team': 5.0,
+            'share_primary_team': 3.0,
+            'share_team': 0.5,
+            'anime_debut': 3.0,
+            'partner': 5.0,
+            'affiliation': 1.0,
+        }
+
+        super().__init__(json_file, NARUTO_WEIGHTS)
+
     def _build_graph(self):
         # Checa se personagem estreou no Boruto
         self.characters_data = [
@@ -195,10 +212,10 @@ class CharacterGraph(AbstractCharacterGraph):
         ]
         # Adiciona nós
         for character in self.characters_data:
-            self.graph.add_node(
-                    character['name'], id=character["id"],
-                    images=character["images"]
-                )
+            self.graph.add_node(Character(
+                id=character["id"], name=character['name'],
+                images=character["images"]
+            ))
 
         # Adiciona arestas com a nova lógica de ponderação
         for i, char1 in enumerate(self.characters_data):
@@ -314,26 +331,23 @@ class CharacterGraph(AbstractCharacterGraph):
                 if total_weight > 0:
                     # Ordena para consistência
                     relation_label = ', '.join(sorted(relations))
-                    self.graph.add_edge(name1, name2, relation=relation_label,
+                    first: Character = Character(
+                        id=char1["id"], name=char1["name"],
+                        images=char1["images"]
+                    )
+                    second: Character = Character(
+                        id=char2["id"], name=char2["name"],
+                        images=char2["images"]
+                    )
+                    self.graph.add_edge(first, second, relation=relation_label,
                                         weight=total_weight)
-
-NARUTO_WEIGHTS: dict[str, int] = {
-    'family': 3,
-    'clan': 1,
-    'same_primary_team': 5,
-    'share_primary_team': 3,
-    'share_team': 0.5,
-    'anime_debut': 3,
-    'partner': 5,
-    'affiliation': 1,
-}
 
 
 if __name__ == "__main__":
     # Inicializa a classe com o arquivo JSON
     BASE_DIR = os.path.dirname(os.path.abspath(__file__))
     json_path = os.path.join(BASE_DIR, 'data', 'characters.json')
-    character_graph = CharacterGraph(json_path, NARUTO_WEIGHTS)
+    character_graph = CharacterGraph(json_path)
 
     # Salva o grafo ponderado
     output_dir = os.path.join(BASE_DIR, 'data', 'graph')
@@ -345,5 +359,5 @@ if __name__ == "__main__":
     top = character_graph.get_top_connections('Kabuto Yakushi')
     print(character_graph.distance("Naruto Uzumaki", "Mitsuo"))
 
-    # for i, (name, score) in enumerate(top, start=1):
-    #     print(f"{i:2}. {name:<20} {score:.3f}")
+    for i, (name, score) in enumerate(top, start=1):
+        print(f"{i:2}. {str(name):<20} {score:.3f}")

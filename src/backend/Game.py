@@ -53,7 +53,8 @@ class Game:
         Verifica se o jogo terminou.
         Incrementa contador de escolhas.
         """
-        self.current = self.cgraph.to_char(id)
+
+        self.current = self.cgraph.search(id)
         self.choices_count += 1
         self.check_end_game()
 
