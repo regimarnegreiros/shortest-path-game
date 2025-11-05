@@ -25,8 +25,9 @@ class Game:
     def set_destination(self) -> Character:
         """Define e retorna o personagem de destino"""
         while True:
-            destination = self.cgraph.rand_chars(k=1)[0]
-            if destination != self.initial:
+            destination: Character = self.cgraph.rand_chars(k=1)[0]
+            if (destination != self.initial
+                and self.cgraph.distance(self.initial, destination)):
                 return destination
 
     def check_end_game(self) -> bool:
@@ -63,30 +64,37 @@ class Game:
             if k > max_c:
                 return list()
 
-            neighbors: list | None = (self.cgraph.get_top_connections(
+            top_neighbors: list | None = (self.cgraph.get_top_connections(
                                         target_character=self.current.name,
                                         top_n=max_c))
-            if not neighbors:
+            if not top_neighbors:
                 return list()
-            
+
             print("Proximos do atual:")
-            for i, (name, score) in enumerate(neighbors, start=1):
+            for i, (name, score) in enumerate(top_neighbors, start=1):
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
             print("Próximos do destino:")
             for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination.name), start=1):
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
-            neighbors = [neighbor[0] for neighbor in neighbors]
-            nodes: list[Character] = list(self.cgraph.graph.nodes)
-            characters: list[Character] = [node for node in nodes if node in neighbors]
+            characters: list[Character] = [neighbor[0] for neighbor in top_neighbors]
 
             shuffle(characters)
 
+            shortest: tuple[Character] | None = self.cgraph.distance(self.current, self.destination)
+
+            if shortest and len(shortest) > 1 and shortest[1] in characters:
+                characters.remove(shortest[1])
+                characters.insert(0, shortest[1])
+
             if self.destination in characters:
-                characters = characters[:(k - 1)] + [self.destination]
+                characters.remove(self.destination)
+                characters.insert(0, self.destination)
             else:
                 characters = characters[:k]
+
+            shuffle(characters)
 
             print(self.cgraph.distance(self.current.name, self.destination.name))
 
