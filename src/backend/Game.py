@@ -1,5 +1,5 @@
 import os
-from Graph import CharacterGraph, NARUTO_WEIGHTS
+from Graph import CharacterGraph
 from Character import Character
 from random import shuffle
 
@@ -59,40 +59,44 @@ class Game:
         self.check_end_game()
 
     def options(self, k: int = 5, max_c: int = 10) -> list[Character] | list:
-        """Retorna até `k` de `max_c` personagens vizinhos ao atual"""
-        if k > max_c:
-            return list()
+            """Retorna até `k` de `max_c` personagens vizinhos ao atual"""
+            if k > max_c:
+                return list()
 
-        neighbors: list | None = (self.cgraph.get_top_connections(
-                                      target_character=self.current.name,
-                                      top_n=max_c))
-        if not neighbors:
-            return list()
+            neighbors: list | None = (self.cgraph.get_top_connections(
+                                        target_character=self.current.name,
+                                        top_n=max_c))
+            if not neighbors:
+                return list()
+            
+            print("Proximos do atual:")
+            for i, (name, score) in enumerate(neighbors, start=1):
+                print(f"{i:2}. {str(name):<20} {score:.3f}")
 
-        neighbors = [neighbor[0] for neighbor in neighbors]
-        nodes: dict[str, dict] = dict(self.cgraph.graph.nodes(data=True))
-        nodes = {node: nodes[node] for node in nodes if node in neighbors}
-        characters: list[Character] = list()
+            print("Próximos do destino:")
+            for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination.name), start=1):
+                print(f"{i:2}. {str(name):<20} {score:.3f}")
 
-        for node in nodes:
-            data: dict = nodes[node]
-            characters.append(Character(
-                              data["id"], node, data["images"]))
+            neighbors = [neighbor[0] for neighbor in neighbors]
+            nodes: list[Character] = list(self.cgraph.graph.nodes)
+            characters: list[Character] = [node for node in nodes if node in neighbors]
 
-        if self.destination in characters:
-            characters = characters[:(k - 1)] + [self.destination]
-        else:
-            characters = characters[:k]
+            shuffle(characters)
 
-        shuffle(characters)
+            if self.destination in characters:
+                characters = characters[:(k - 1)] + [self.destination]
+            else:
+                characters = characters[:k]
 
-        return characters
+            print(self.cgraph.distance(self.current.name, self.destination.name))
+
+            return characters
 
 
 # Inicializa a classe com o arquivo JSON
 BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 json_path: str = os.path.join(BASE_DIR, 'data', 'characters.json')
-character_graph: CharacterGraph = CharacterGraph(json_path, NARUTO_WEIGHTS)
+character_graph: CharacterGraph = CharacterGraph(json_path)
 
 # Salva o grafo ponderado
 output_dir: str = os.path.join(BASE_DIR, 'data', 'graph')

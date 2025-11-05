@@ -36,12 +36,12 @@ def _get_game_status_data(game: Game, game_id: str) -> dict:
         "loss": game.loss
     }
 
-@api_bp.before_request
-def restrict_origin():
-    allowed_origins = ["http://localhost:5000"]
-    origin = request.headers.get("Origin")
-    if origin and origin not in allowed_origins:
-        return jsonify({"error": "Origem não autorizada"}), 403
+# @api_bp.before_request
+# def restrict_origin():
+#     allowed_origins = ["http://localhost:5000"]
+#     origin = request.headers.get("Origin")
+#     if origin and origin not in allowed_origins:
+#         return jsonify({"error": "Origem não autorizada"}), 403
 
 @api_bp.route("/start", methods=["POST"])
 def start_game():
