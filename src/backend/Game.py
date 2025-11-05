@@ -1,7 +1,7 @@
 import os
 from Graph import CharacterGraph
 from Character import Character
-from random import shuffle
+from random import shuffle, choice
 
 class Game:
     def __init__(self, graph: CharacterGraph, max_choices: int = None):
@@ -26,9 +26,39 @@ class Game:
     def set_destination(self) -> Character:
         """Define e retorna o personagem de destino"""
         while True:
-            destination: Character = self.cgraph.rand_chars(k=1)[0]
-            if (destination != self.initial
-                and self.cgraph.distance(self.initial, destination)):
+            visited = []
+            number_of_choises = 50
+            number_of_neighbors = 5
+
+            destination = choice(self.cgraph.get_top_connections(self.initial.name, number_of_neighbors))[0]
+            print(destination)
+
+            repeated = 0
+            while number_of_choises >= 0 and repeated < 10:
+                opt_num = number_of_neighbors
+                while opt_num < 15:
+                    options = self.cgraph.get_top_connections(destination, opt_num)
+                    available = [opt[0] for opt in options if opt[0] not in visited]
+
+                    if available:
+                        destination = choice(available)
+                        visited.append(destination)
+                        break
+
+                    opt_num += 3
+                    print('loop', opt_num)
+
+                if not available:
+                    destination = choice(self.cgraph.get_top_connections(destination, number_of_neighbors + 5))[0]
+                    number_of_choises += 2
+                    print("\033[91mTEVE QUE REPETIR\033[0m")
+                    repeated += 1
+
+                
+                number_of_choises -= 1
+                print(destination, number_of_choises)
+
+            if len(self.cgraph.distance(self.initial.name, destination)) > 3:
                 return destination
 
     def check_end_game(self) -> bool:
