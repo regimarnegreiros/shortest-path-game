@@ -10,6 +10,7 @@ class Game:
         self.initial: Character = self.set_initial()
         self.current: Character = self.initial
         self.destination: Character = self.set_destination()
+        self.path: list[Character] = [self.initial]
 
         self.choices_count: int = 0
         self.max_choices: int | None = max_choices  # None = ilimitado
@@ -57,6 +58,7 @@ class Game:
 
         self.current = self.cgraph.search(id)
         self.choices_count += 1
+        self.path.append(self.current)
         self.check_end_game()
 
     def options(self, k: int = 5, max_c: int = 10) -> list[Character] | list:
@@ -70,6 +72,22 @@ class Game:
             if not top_neighbors:
                 return list()
 
+            # Evita personagens já visitados
+            count: int = 0
+            characters: list[Character] = [neighbor[0] for neighbor in top_neighbors]
+            for done in self.path:
+                if done in characters:
+                    count += 1
+
+            top_neighbors = (self.cgraph.get_top_connections(
+                                target_character=self.current.name,
+                                top_n=max_c + count))
+
+            characters = [neighbor[0] for neighbor in top_neighbors]
+            for done in self.path:
+                if done in characters:
+                    characters.remove(done)
+
             print("Proximos do atual:")
             for i, (name, score) in enumerate(top_neighbors, start=1):
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
@@ -78,21 +96,21 @@ class Game:
             for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination.name), start=1):
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
-            characters: list[Character] = [neighbor[0] for neighbor in top_neighbors]
-
             shuffle(characters)
 
             shortest: tuple[Character] | None = self.cgraph.distance(self.current, self.destination)
 
-            if shortest and len(shortest) > 1 and shortest[1] in characters:
-                characters.remove(shortest[1])
+            if shortest and len(shortest) > 1:
+                if shortest[1] in characters:
+                    characters.remove(shortest[1])
+
                 characters.insert(0, shortest[1])
 
             if self.destination in characters:
                 characters.remove(self.destination)
                 characters.insert(0, self.destination)
-            else:
-                characters = characters[:k]
+
+            characters = characters[:k]
 
             shuffle(characters)
 
