@@ -46,6 +46,14 @@ async function startGame() {
     if (gameState) {
         updateCharDiplay(character_origem, gameState.initial);
         updateCharDiplay(character_destino, gameState.destination);
+        for (let index = 1; index < gameState.path.length; index++) {
+            let escolhasFeitas = document.createElement('button');
+            updateCharDiplay(escolhasFeitas,gameState.path[index]);
+           // barra_processo.insertBefore(escolhasFeitas, character_destino);
+            localEscolha(escolhasFeitas);
+            escolhasFeitas.classList.add('char-display','char-display-options');    
+        }
+        
         await getOptions();
 
         // console.log(gameState);
@@ -111,25 +119,19 @@ function updateCharDiplay(html_element, char_data) {
 
 
 
-// preciso da propriedade de caminho/lista de escolhas feitas do back
-function carregaEscolhasAntigas(path) {
-    const escolhasFeitas = document.querySelectorAll('.path-step');
-    escolhasFeitas.forEach(passo => passo.remove());
-    // daí agora eu pegaria do back 
 
-}
 
 
 async function selected(e) {
 
     const selectedOption = e.currentTarget; // botão clicado
-    const currentOpstions = barra_processo.querySelectorAll('.char-display-options');
+    //const currentOpstions = barra_processo.querySelectorAll('.char-display-options');
     const selected_id = selectedOption.dataset.id;
     console.log(selected_id); //teste
     console.log(selectedOption); //teste tmb
     lockOptions(true);
     selectedOption.removeEventListener('click', selected);
-    localEscolha(currentOpstions, selectedOption);
+    localEscolha(selectedOption);
     // slectedOption.classList.add('move');  classe depois pra animar
     perga.classList.add('fecha');
     try {
@@ -138,7 +140,7 @@ async function selected(e) {
             console.log("Game over.", newState.win ? "Vitória!" : "Derrota!");
             perga.classList.remove('fecha'); // cancela a animação
 
-            alert(newState.win ? "UHUL" : "BUUUH");
+            showEndGameModal(newState.win);
             lockOptions(false);
             return;
         }
@@ -162,20 +164,37 @@ async function selected(e) {
     }
 }
 
-function localEscolha(c_options, s_options) {
-    if (c_options.length == 0) {
+// essa função foi  feita praticamente toda por IA
+function showEndGameModal(win) {
+  const modal = document.getElementById("endGameModal");
+  const title = document.getElementById("modalTitle");
+  const message = document.getElementById("modalMessage");
+  const button = document.getElementById("modalButton");
 
-        barra_processo.insertBefore(s_options, character_destino);
+  title.textContent = win ? "Vitória!" : "Derrota...";
+  message.textContent = win
+    ? "Você alcançou o destino! "
+    : "Seu caminho chegou ao fim.";
+
+  modal.style.display = "flex";
+  const escolhasFeitas = barra_processo.querySelectorAll('.char-display-options');
+
+  button.onclick = () => {
+    modal.style.display = "none";
+    escolhasFeitas.forEach(botao => {
+    botao.remove(); 
+});
+    startGame(); 
+  };
+}
 
 
-    }
-    else { // aqui vou ter que mudar quando for uma 'boa' ou 'má' escolha
-
-        barra_processo.insertBefore(s_options, c_options[c_options.length - 1])
-
-    }
+function localEscolha(s_options) {
+   
+ barra_processo.insertBefore(s_options, character_destino);
 
 }
+
 
 
 

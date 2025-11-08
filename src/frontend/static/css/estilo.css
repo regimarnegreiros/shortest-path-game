@@ -212,3 +212,70 @@ h1 {
     transition: none;
     pointer-events: auto;
 }
+
+
+/* ==================== MODAL ==================== */
+.modal {
+  display: none; /* começa invisível */
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.modal-content {
+  background-color: #fff;
+  border: 4px solid #FF7F50;
+  border-radius: 15px;
+  padding: 40px 60px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: popUp 0.5s ease forwards;
+  font-family: 'sans_undertale';
+}
+
+.modal-content h2 {
+  font-family: 'naruto';
+  color: #FF7F50;
+  margin-bottom: 15px;
+  font-size: 40px;
+}
+
+.modal-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.modal-btn {
+  background-color: #FF7F50;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'sans_undertale';
+}
+
+.modal-btn:hover {
+  background-color: #e66a3d;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
