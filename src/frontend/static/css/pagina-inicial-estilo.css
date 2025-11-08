@@ -17,24 +17,42 @@
     background-color: #f0f4f8;
     color: #333;
     display: flex;
-    justify-content: center;   /*eixo horizontal*/
+    flex-direction: column;
+    justify-content: flex-start;   /*eixo horizontal*/
     align-items: center;       /*eixo vertical*/
     height: 100vh;             /*vh = viewport height*/
-   background-image: url('../images/naruto_background.png');
-   background-size:cover ;
-   text-align: center;
-   overflow: hidden
-}
+    background-image: url('../images/naruto_background.png');
+    background-size:cover ;
+    text-align: center;
+    overflow: hidden
+    }
 
 .container {
-    padding: 30px 40px;
+    padding: 20px 40px;
+     background-color: #dedac9;
 
+    border-top:
+        20px solid #a4988a;
+    border-left:
+        20px solid #a4988a;
+    border-right:
+        20px solid #6a635c;
+    border-bottom:
+        20px solid #6a635c;
+    border-radius: 5px;
+
+    box-shadow: 0px 10px 30px #363636 ;
+
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
 }
 
 .titulo-maneiro {
     color: #ff6200; 
     font-family: 'naruto';
-    font-size: 60px;
+    font-size: 50px;
     text-shadow:
         -2px -2px 0 white,
         2px -2px 0 white,
@@ -44,34 +62,41 @@
         4px -4px 0 rgb(0, 0, 0),
         -4px  4px 0 rgb(0, 0, 0),
         4px  4px 0 rgb(0, 0, 0),
-        6px  6px 0px rgb(6, 0, 111),
-        8px  0px 0px rgb(6, 0, 111),
-        0px  0px 30px rgb(0, 13, 100);
+        6px  6px 0px rgb(81, 78, 60),
+        8px  0px 0px rgb(40, 40, 40);
 
-        padding: 40px 40px;
-        
-    border-radius: 10px;
-   
+    border-top: 7px dashed #943428;
+    border-bottom: 7px dashed #943428;
+
+    padding: 40px 0px;
+    margin-bottom: 100px;
+
 }
-
+.titulo-maneiro-icon{
+    width: 60px;
+    height: 60px;
+    transform: translateY(8px);   
+}
 .regras-titulo {
     font-family: 'naruto' ;
-    font-size: 35px;
+    font-size: 30px;
     text-align: center;
 }
-
+.regras-titulo-icon {
+    width: 40px;
+    height: 40px;
+    transform: translateY(7px);  
+}
 .regras {
     background-color: #e1dcc6;
 
     border: 
-        12px solid #7a291f;
+        10px solid #943428;
 
-
-    padding: 20px 27px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 20px 20px;
 
     font-family: 'sans_undertale';
-    font-size: 20px;
+    font-size: 18px;
 
     margin-top: 20px;
     margin-bottom: 30px;
@@ -81,7 +106,7 @@
 }
 .regras-explicacao{
     font-family: 'sans_undertale';
-    font-size: 25px;
+    font-size: 20px;
     text-align: center;
 }
 
@@ -95,20 +120,49 @@
     font-family: 'sans_undertale';
     text-align: center;
 }
+.regras-regras-individuais-icon{
+    width: 25px;
+    height: 25px;
+    transform: translateY(5px);   /* moves 2px down */
+}
 /* link  botão */
 .botao-play {
     display: inline-block;
-    background-color: #FF7F50;
-    color: white;
-    padding: 15px 30px;
+    background-color: #b5b5b5;
+    color: rgb(21, 21, 21);
+
+    border-left: 
+        10px solid #ffffff;
+    border-top: 
+        10px solid #ffffff;
+    border-bottom: 
+        10px solid #70737c;
+    border-right: 
+        10px solid #70737c;
+
+    box-shadow: 0px 0px 10px rgb(87, 87, 87) ;
+    background-image: url('../images/Play-holes.png');
+    background-size: cover;        /* make it fill the container */
+    background-position: center;   /* keep the image centered */
+    background-repeat: no-repeat;  /* prevent tiling */
+    background-size: 310px 85px;  /* width height */
+    width: 285px;
+    margin: 0px auto;
+    text-shadow: 0px 0px 25px white;
+
+    margin-top: 30px;
+    padding: 20px 10px;
     text-decoration: none; /* Remove o sublinhado do link */
-    font-size: 18px;
-    font-weight: bold;
-    border-radius: 5px;
+    font-family: 'sans-undertale' ;
+    font-size: 35px;
+    text-align: center;  
+
     transition: background-color 0.5s ease; 
 }
 
 
 .botao-play:hover {
-    background-color: #e66a3d;
+    background-color: #ffffff;
+
+
 }
