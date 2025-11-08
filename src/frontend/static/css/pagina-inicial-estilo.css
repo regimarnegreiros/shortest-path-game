@@ -43,7 +43,7 @@
 
     box-shadow: 0px 10px 30px #363636 ;
 
-    margin-top: 30px;
+    margin-top: 25px;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
@@ -69,7 +69,7 @@
     border-bottom: 7px dashed #943428;
 
     padding: 40px 0px;
-    margin-bottom: 100px;
+    margin-bottom: 40px;
 
 }
 .titulo-maneiro-icon{
@@ -146,12 +146,12 @@
     background-position: center;   /* keep the image centered */
     background-repeat: no-repeat;  /* prevent tiling */
     background-size: 310px 85px;  /* width height */
-    width: 285px;
+    width: 290px;
     margin: 0px auto;
     text-shadow: 0px 0px 25px white;
 
-    margin-top: 30px;
-    padding: 20px 10px;
+    margin-top: 15px;
+    padding: 28px 7px;
     text-decoration: none; /* Remove o sublinhado do link */
     font-family: 'sans-undertale' ;
     font-size: 35px;
