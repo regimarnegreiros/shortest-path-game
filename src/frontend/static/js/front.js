@@ -178,12 +178,14 @@ function showEndGameModal(win) {
 
   modal.style.display = "flex";
   const escolhasFeitas = barra_processo.querySelectorAll('.char-display-options');
+  const escolhas = perga.querySelectorAll('.char-display');
 
   button.onclick = () => {
     modal.style.display = "none";
     escolhasFeitas.forEach(botao => {
     botao.remove(); 
 });
+    document.querySelector('.div-Teste-options').innerHTML = '';
     startGame(); 
   };
 }
