@@ -8,6 +8,21 @@
   src: url('../fonts/qd-better-comic-sans-font/Qdbettercomicsans-jEEeG.ttf') format('truetype');
 }
 
+@font-face {
+  font-family: 'shuriken';
+  src: url('../fonts/the-last-shuriken/The\ Last\ Shuriken.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'manga-temple';
+  src: url('../fonts/manga-temple/mangat.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'bubble-sans';
+  src: url('../fonts/bubble-sans/Bubble\ Sans\ 1.01.otf') format('opentype');
+}
+
 /*==================================================================*/
 /*CSS DO INDEX.HTML // PAGINA INICIAL*/
 /*==================================================================*/
@@ -105,7 +120,7 @@
 
 }
 .regras-explicacao{
-    font-family: 'sans_undertale';
+    font-family: 'bubble-sans';
     font-size: 20px;
     text-align: center;
 }
@@ -117,7 +132,7 @@
 
 .regras-regras-individuais{
     color: #020202;
-    font-family: 'sans_undertale';
+    font-family: 'bubble-sans';
     text-align: center;
 }
 .regras-regras-individuais-icon{
@@ -129,7 +144,7 @@
 .botao-play {
     display: inline-block;
     background-color: #b5b5b5;
-    color: rgb(21, 21, 21);
+    color: rgb(86, 86, 86);
 
     border-left: 
         10px solid #ffffff;
@@ -153,7 +168,8 @@
     margin-top: 15px;
     padding: 28px 7px;
     text-decoration: none; /* Remove o sublinhado do link */
-    font-family: 'sans-undertale' ;
+
+    font-family: 'shuriken' ;
     font-size: 35px;
     text-align: center;  
 

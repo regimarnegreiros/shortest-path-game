@@ -1,7 +1,7 @@
 import os
-from Graph import CharacterGraph, NARUTO_WEIGHTS
+from Graph import CharacterGraph
 from Character import Character
-from random import shuffle
+from random import shuffle, choice
 
 class Game:
     def __init__(self, graph: CharacterGraph, max_choices: int = None):
@@ -10,6 +10,7 @@ class Game:
         self.initial: Character = self.set_initial()
         self.current: Character = self.initial
         self.destination: Character = self.set_destination()
+        self.path: list[Character] = [self.initial]
 
         self.choices_count: int = 0
         self.max_choices: int | None = max_choices  # None = ilimitado
@@ -25,8 +26,39 @@ class Game:
     def set_destination(self) -> Character:
         """Define e retorna o personagem de destino"""
         while True:
-            destination = self.cgraph.rand_chars(k=1)[0]
-            if destination != self.initial:
+            visited = []
+            number_of_choises = 50
+            number_of_neighbors = 5
+
+            destination = choice(self.cgraph.get_top_connections(self.initial.name, number_of_neighbors))[0]
+            print(destination)
+
+            repeated = 0
+            while number_of_choises >= 0 and repeated < 10:
+                opt_num = number_of_neighbors
+                while opt_num < 15:
+                    options = self.cgraph.get_top_connections(destination, opt_num)
+                    available = [opt[0] for opt in options if opt[0] not in visited]
+
+                    if available:
+                        destination = choice(available)
+                        visited.append(destination)
+                        break
+
+                    opt_num += 3
+                    print('loop', opt_num)
+
+                if not available:
+                    destination = choice(self.cgraph.get_top_connections(destination, number_of_neighbors + 5))[0]
+                    number_of_choises += 2
+                    print("\033[91mTEVE QUE REPETIR\033[0m")
+                    repeated += 1
+
+                
+                number_of_choises -= 1
+                print(destination, number_of_choises)
+
+            if len(self.cgraph.distance(self.initial.name, destination)) > 3:
                 return destination
 
     def check_end_game(self) -> bool:
@@ -53,45 +85,74 @@ class Game:
         Verifica se o jogo terminou.
         Incrementa contador de escolhas.
         """
-        self.current = self.cgraph.to_char(id)
+
+        self.current = self.cgraph.search(id)
         self.choices_count += 1
+        self.path.append(self.current)
         self.check_end_game()
 
     def options(self, k: int = 5, max_c: int = 10) -> list[Character] | list:
-        """Retorna até `k` de `max_c` personagens vizinhos ao atual"""
-        if k > max_c:
-            return list()
+            """Retorna até `k` de `max_c` personagens vizinhos ao atual"""
+            if k > max_c:
+                return list()
 
-        neighbors: list | None = (self.cgraph.get_top_connections(
-                                      target_character=self.current.name,
-                                      top_n=max_c))
-        if not neighbors:
-            return list()
+            top_neighbors: list | None = (self.cgraph.get_top_connections(
+                                        target_character=self.current.name,
+                                        top_n=max_c))
+            if not top_neighbors:
+                return list()
 
-        neighbors = [neighbor[0] for neighbor in neighbors]
-        nodes: dict[str, dict] = dict(self.cgraph.graph.nodes(data=True))
-        nodes = {node: nodes[node] for node in nodes if node in neighbors}
-        characters: list[Character] = list()
+            # Evita personagens já visitados
+            count: int = 0
+            characters: list[Character] = [neighbor[0] for neighbor in top_neighbors]
+            for done in self.path:
+                if done in characters:
+                    count += 1
 
-        for node in nodes:
-            data: dict = nodes[node]
-            characters.append(Character(
-                              data["id"], node, data["images"]))
+            top_neighbors = (self.cgraph.get_top_connections(
+                                target_character=self.current.name,
+                                top_n=max_c + count))
 
-        if self.destination in characters:
-            characters = characters[:(k - 1)] + [self.destination]
-        else:
+            characters = [neighbor[0] for neighbor in top_neighbors]
+            for done in self.path:
+                if done in characters:
+                    characters.remove(done)
+
+            print("Proximos do atual:")
+            for i, (name, score) in enumerate(top_neighbors, start=1):
+                print(f"{i:2}. {str(name):<20} {score:.3f}")
+
+            print("Próximos do destino:")
+            for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination.name), start=1):
+                print(f"{i:2}. {str(name):<20} {score:.3f}")
+
+            shuffle(characters)
+
+            shortest: tuple[Character] | None = self.cgraph.distance(self.current, self.destination)
+
+            if shortest and len(shortest) > 1:
+                if shortest[1] in characters:
+                    characters.remove(shortest[1])
+
+                characters.insert(0, shortest[1])
+
+            if self.destination in characters:
+                characters.remove(self.destination)
+                characters.insert(0, self.destination)
+
             characters = characters[:k]
 
-        shuffle(characters)
+            shuffle(characters)
 
-        return characters
+            print(self.cgraph.distance(self.current.name, self.destination.name))
+
+            return characters
 
 
 # Inicializa a classe com o arquivo JSON
 BASE_DIR: str = os.path.dirname(os.path.abspath(__file__))
 json_path: str = os.path.join(BASE_DIR, 'data', 'characters.json')
-character_graph: CharacterGraph = CharacterGraph(json_path, NARUTO_WEIGHTS)
+character_graph: CharacterGraph = CharacterGraph(json_path)
 
 # Salva o grafo ponderado
 output_dir: str = os.path.join(BASE_DIR, 'data', 'graph')
