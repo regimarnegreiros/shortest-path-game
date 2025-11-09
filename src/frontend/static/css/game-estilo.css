@@ -1,0 +1,380 @@
+
+@font-face {
+  font-family: 'shuriken';
+  src: url('../fonts/the-last-shuriken/The\ Last\ Shuriken.ttf') format('truetype');
+}
+@font-face {
+  font-family: 'naruto';
+  src: url('../fonts/ninja_naruto/njnaruto.ttf') format('truetype');
+}
+.outer-titulo{
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+    height: 103px;
+    background-color: #e0d8be;
+    margin: 1%;
+    border-top: 12px solid #943428;
+    border-bottom: 12px solid #943428;
+}
+.titulo-maneiro {
+    color: #ef5c00; 
+    font-family: 'naruto';
+    font-size: 50px;
+    text-shadow:
+        -2px -2px 0 white,
+        2px -2px 0 white,
+        -2px  2px 0 white,
+        2px  2px 0 white,   
+        -4px -4px 0 rgb(0, 0, 0),
+        4px -4px 0 rgb(0, 0, 0),
+        -4px  4px 0 rgb(0, 0, 0),
+        4px  4px 0 rgb(0, 0, 0),
+        6px  6px 0px rgb(81, 78, 60),
+        8px  0px 0px rgb(40, 40, 40);
+
+    border-top: 10px dotted #303030;
+    border-bottom: 10px dotted #313131;
+    padding: 3% 0%;
+}
+.titulo-maneiro-icon{
+    width: 60px;
+    height: 60px;
+    transform: translateY(8px);   
+}
+
+.game-body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f4f8;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    height: 100vh;
+    background-image: url('../images/naruto_background.png');
+    background-size: cover;
+    overflow: hidden
+}
+
+/*#=============================================#*/
+/*#         Divs do tabuleiro                   #*/
+/*#=============================================#*/
+.board{
+    display: flex;
+    justify-content: center ;
+    align-items: center;
+    background-color: #e0d8be;
+    height: 226px;
+    min-width: 0%;
+    margin-top: 0%;
+    border-top: 18px solid rgb(151, 126, 103) ;
+    border-bottom: 18px solid rgb(151, 126, 103) ;
+}
+.pergaminho-board{
+    align-self: left ;
+    width: 90px;
+    height: 295px;
+    transform: translateY(0px);   
+}
+.div-Teste {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    min-width: 60%;
+    height: 225px;
+    margin-left: 2%;
+    margin-right: 2%;
+    padding-bottom: 1% ; 
+}
+.div-Teste-options {
+
+    align-items: center;
+    justify-content: space-between;
+
+    min-width: 30%;
+    margin: 2%;
+}
+
+/*#=============================================#*/
+/*#      Div das options (perga container)      #*/
+/*#=============================================#*/
+.outer-perga{
+    display: flex;
+    flex-direction: row;
+
+}
+.perga-container {
+    min-width: 0%;
+    min-height: 0%;
+    background-color: rgb(224, 152, 104);
+    display: flex;
+    
+    margin-top: 2%;
+    align-content: center;
+    justify-content: center;
+    transition: all 0.6s ease;
+    transform-origin: right;
+}
+.pergaminho-perga{
+    width: 90px;
+    height: 295px;
+    transform: translateY(0px);  
+ 
+}
+.perga-container.fecha {
+    transform: scaleX(0.01);
+}
+
+.perga-container.open {
+    transform: scaleX(1);
+}
+
+#origem,#destino {
+    position: relative;
+}
+
+/*#=============================================#*/
+/*#         Displays dos personagens            #*/
+/*#=============================================#*/
+
+.char-display { /*MAIN DISPLAY*/
+    display: flex;
+    margin: 5px ;
+    background-color: #b0b9c0;
+    border-radius: 5px;
+    box-shadow: 0px 8px 5px rgb(99, 99, 99);
+    height: 150px;
+    width: 150px;
+    border: 2px solid #000000;
+    align-items: center;
+    justify-content: center;
+    padding: 1%;
+}
+
+.char-display-header{
+    background-color: #d8ba4f;
+    margin-bottom: 200px;
+}
+.char-display-origem{ /*DISPLAY PERSONAGEM DE ORIGEM*/
+    background-color: #545454;
+    border-left: 
+        7px solid #8b8b8b;
+    border-top: 
+        7px solid #8b8b8b;
+    border-bottom: 
+        7px solid #313131;
+    border-right: 
+        7px solid #313131;
+    margin-right: 2%;
+}
+.char-display-destino{/*DISPLAY PERSONAGEM DE DESTINO*/
+    background-color: #d8ba4f;
+    
+    border-left: 
+        7px solid #e9dc86;
+    border-top: 
+        7px solid #e9dc86;
+    border-bottom: 
+        7px solid #89753d;
+    border-right: 
+        7px solid #89753d;
+    margin-left: 2%;
+
+}
+.char-display-options { /*DISPLAY DOS PERSONAGENS DAS OPTIONS*/
+
+    height: 130px;
+    width: 130px;
+    margin-left: -15px;
+    margin-right: -15px;
+    flex-direction: row;
+    z-index: 1;
+    transition: all 0.25s ease;
+    border: 3px solid #ffffff;
+
+    border-left: 
+        7px solid #dadada;
+    border-top: 
+        7px solid #ffffff;
+    border-bottom: 
+        7px solid #70737c;
+    border-right: 
+        7px solid #70737c;
+
+}
+
+.char-display img {/*DISPLAY DE IMAGEM MAIN*/
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    
+    border-left: 
+        4px solid #798287;
+    border-top: 
+        4px solid #798287;
+    border-bottom: 
+        4px solid #eceffa;
+    border-right: 
+        4px solid #edf1ff;
+}
+.char-display-destino img{ /*IMAGEM ORIGEM*/
+    border-left: 
+        4px solid #89753d;
+    border-top: 
+        4px solid #89753d;
+    border-bottom: 
+        4px solid #e9dc86;
+    border-right: 
+        4px solid #e9dc86;
+}
+.char-display-origem img{ /*IMAGEM DESTINO*/
+    border-left: 
+        4px solid #313131;
+    border-top: 
+        4px solid #313131;
+    border-bottom: 
+        4px solid #8b8b8b;
+    border-right: 
+        4px solid #8b8b8b;
+}
+
+.char-display p {
+    font-weight: bold;
+    font-size: 18px;
+    color: #333;
+    padding: 5px;
+    text-align: center;
+}
+
+.char-display-options:hover { /*HOVER DOS OPTIONS*/
+
+    flex-direction: row;
+    z-index: 2;
+    scale: 1.3;
+    box-shadow: 0px 0px 30px black;
+}
+
+/*#=============================================#*/
+/*#         Displays dos NOMES                  #*/
+/*#=============================================#*/
+
+.char-name-overlay {
+    position: absolute;
+    /*flutua sobre o pai*/
+    top: 110px;
+    left: 0;
+    background-color: rgb(200, 200, 200);
+    color: rgb(59, 59, 59);
+    padding: 3px 6px;
+
+    font-family: 'shuriken' ;
+    font-size: 12px;
+    font-weight: bold;
+
+    border-left: 
+        5px solid #ffffff;
+    border-top: 
+        5px solid #ffffff;
+    border-bottom: 
+        5px solid #70737c;
+    border-right: 
+        5px solid #70737c;
+
+    box-shadow: 0px 0px 25px #000000;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+
+}
+.char-display:hover .char-name-overlay {
+    opacity: 1;
+}
+
+/*nome da origem e destino*/
+#origem .char-name-overlay,
+#destino .char-name-overlay {
+    opacity: 1;
+    top: 140px;
+    left: 0;
+    right: 0;
+    width: 100%;
+    text-align: center;
+    font-size: 16px;
+    padding: 4px 0;
+    background-color: rgb(200, 200, 200);
+    border-bottom-right-radius: 0;
+    transition: none;
+    pointer-events: auto;
+}
+
+
+/* ==================== MODAL ==================== */
+.modal {
+  display: none; /* começa invisível */
+  position: fixed;
+  z-index: 999;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(3px);
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.4s ease forwards;
+}
+
+.modal-content {
+  background-color: #fff;
+  border: 4px solid #FF7F50;
+  border-radius: 15px;
+  padding: 40px 60px;
+  text-align: center;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+  animation: popUp 0.5s ease forwards;
+  font-family: 'sans_undertale';
+}
+
+.modal-content h2 {
+  font-family: 'naruto';
+  color: #FF7F50;
+  margin-bottom: 15px;
+  font-size: 40px;
+}
+
+.modal-content p {
+  font-size: 20px;
+  margin-bottom: 30px;
+}
+
+.modal-btn {
+  background-color: #FF7F50;
+  color: #fff;
+  border: none;
+  padding: 12px 25px;
+  border-radius: 8px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'sans_undertale';
+}
+
+.modal-btn:hover {
+  background-color: #e66a3d;
+  transform: scale(1.05);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes popUp {
+  from { transform: scale(0.8); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
