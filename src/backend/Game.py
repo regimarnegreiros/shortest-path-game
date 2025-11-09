@@ -30,10 +30,10 @@ class Game:
         """Define e retorna o personagem de destino"""
         while True:
             visited = []
-            number_of_choises = 50
+            number_of_choises = 30
             number_of_neighbors = 5
 
-            destination = choice(self.cgraph.get_top_connections(self.initial.name, number_of_neighbors))[0]
+            destination = choice(self.cgraph.get_top_connections(self.initial, number_of_neighbors))[0]
             print(destination)
 
             repeated = 0
@@ -61,7 +61,7 @@ class Game:
                 number_of_choises -= 1
                 print(destination, number_of_choises)
 
-            if len(self.cgraph.distance(self.initial.name, destination)) > 3:
+            if len(self.cgraph.distance(self.initial, destination)) > 3:
                 return destination
 
     def check_end_game(self) -> bool:
@@ -100,7 +100,7 @@ class Game:
                 return list()
 
             top_neighbors: list | None = (self.cgraph.get_top_connections(
-                                        target_character=self.current.name,
+                                        target_character=self.current,
                                         top_n=max_c))
             if not top_neighbors:
                 return list()
@@ -113,7 +113,7 @@ class Game:
                     count += 1
 
             top_neighbors = (self.cgraph.get_top_connections(
-                                target_character=self.current.name,
+                                target_character=self.current,
                                 top_n=max_c + count))
 
             characters = [neighbor[0] for neighbor in top_neighbors]
@@ -126,7 +126,7 @@ class Game:
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
             print("Próximos do destino:")
-            for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination.name), start=1):
+            for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination), start=1):
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
             shuffle(characters)
@@ -147,7 +147,7 @@ class Game:
 
             shuffle(characters)
 
-            print(self.cgraph.distance(self.current.name, self.destination.name))
+            print(self.cgraph.distance(self.current, self.destination))
 
             return characters
 
