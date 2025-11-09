@@ -21,7 +21,10 @@ class Game:
 
     def set_initial(self) -> Character:
         """Define e retorna o personagem inicial"""
-        return self.cgraph.rand_chars(k=1)[0]
+        while True:
+            char = self.cgraph.rand_chars(k=1)[0]
+            if self.cgraph.get_top_connections(char, 5) not in (None, []):
+                return char
 
     def set_destination(self) -> Character:
         """Define e retorna o personagem de destino"""
