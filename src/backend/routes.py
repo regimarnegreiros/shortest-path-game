@@ -57,7 +57,7 @@ def start_game() -> Response:
     game_id: str = str(uuid.uuid4())
 
     # Cria uma nova instância de jogo
-    new_game: Game = Game(character_graph, 30)
+    new_game: Game = Game(character_graph, 15)
 
     # Armazena a instância no dicionário de jogos ativos
     ACTIVE_GAMES[game_id] = new_game
