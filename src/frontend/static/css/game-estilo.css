@@ -85,7 +85,7 @@
     align-self: left ;
     width: 90px;
     height: 295px;
-    transform: translateY(0px);   
+    transform: translateX(-10px);   
 }
 .div-Teste {
     display: flex;
@@ -115,11 +115,11 @@
     align-items: center;
     flex-direction: row;
     justify-content: right;
-    min-width: 780px;
+    min-width: 630px;
 }
 .perga-container {
-    min-width: 620px;
-    height: 239px;
+    min-width: 460px;
+    height: 200px;
     background-color: rgb(213, 207, 179);
     display: flex;
     
@@ -139,7 +139,7 @@
 }
 .pergaminho-perga{
     width: 110px;
-    height: 300px;
+    height: 260px;
     transform: translateX(-30px);  
     
  
@@ -162,12 +162,12 @@
 
 .char-display { /*MAIN DISPLAY*/
     display: flex;
-    margin: 5px ;
+    margin: 5px;
     background-color: #bbc1c2;
     border-radius: 5px;
     box-shadow: 0px 8px 5px rgb(99, 99, 99);
-    height: 150px;
-    width: 150px;
+    height: 100px;
+    width: 100px;
     border: 2px solid #000000;
     align-items: center;
     justify-content: center;
@@ -202,8 +202,8 @@
 }
 .char-display-options { /*DISPLAY DOS PERSONAGENS DAS OPTIONS*/
 
-    height: 130px;
-    width: 130px;
+    height: 100px;
+    width: 100px;
     margin-left: -15px;
     margin-right: -15px;
     flex-direction: row;
@@ -281,13 +281,13 @@
 .char-name-overlay {
     position: absolute;
     /*flutua sobre o pai*/
-    top: 110px;
+    top: 95%;
     background-color: rgb(200, 200, 200);
     color: rgb(37, 37, 37);
     padding: 3px 6px;
 
     font-family: 'manga' ;
-    font-size: 12px;
+    font-size: 10px;
     font-weight: bold;
 
     border-left: 
@@ -313,10 +313,10 @@
 #origem .char-name-overlay,
 #destino .char-name-overlay {
     opacity: 1;
-    top: 140px;
+    top: 95%;
     width: 100%;
     text-align: center;
-    font-size: 16px;
+    font-size: 14px;
     padding: 4px 0;
     background-color: rgb(200, 200, 200);
     border-bottom-right-radius: 0;
