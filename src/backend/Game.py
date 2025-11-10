@@ -22,29 +22,43 @@ class Game:
     def set_initial(self) -> Character:
         """Define e retorna o personagem inicial"""
         while True:
-            char = self.cgraph.rand_chars(k=1)[0]
+            char: Character = self.cgraph.rand_chars(k=1)[0]
+
             if self.cgraph.get_top_connections(char, 5) not in (None, []):
                 return char
 
     def set_destination(self) -> Character:
         """Define e retorna o personagem de destino"""
         while True:
-            visited = []
-            number_of_choises = 30
-            number_of_neighbors = 5
+            visited: list = []
+            number_of_choices: int = 30
+            number_of_neighbors: int = 5
 
-            destination = choice(self.cgraph.get_top_connections(self.initial, number_of_neighbors))[0]
+            connections: list[tuple[Character, float]]
+            connections = self.cgraph.get_top_connections(
+                self.initial,number_of_neighbors)
+
+            if not connections: continue
+
+            destination: Character = choice(connections)[0]
             print(destination)
 
-            repeated = 0
-            while number_of_choises >= 0 and repeated < 10:
-                opt_num = number_of_neighbors
+            repeated: int = 0
+
+            while number_of_choices >= 0 and repeated < 10:
+                opt_num: int = number_of_neighbors
+
                 while opt_num < 15:
-                    options = self.cgraph.get_top_connections(destination, opt_num)
-                    available = [opt[0] for opt in options if opt[0] not in visited]
+                    options: list[tuple[Character, float]]
+                    options = self.cgraph.get_top_connections(
+                        destination, opt_num)
+
+                    available: list[Character]
+                    available = [opt[0] for opt in options
+                                 if opt[0] not in visited]
 
                     if available:
-                        destination = choice(available)
+                        destination: Character = choice(available)
                         visited.append(destination)
                         break
 
@@ -52,14 +66,19 @@ class Game:
                     print('loop', opt_num)
 
                 if not available:
-                    destination = choice(self.cgraph.get_top_connections(destination, number_of_neighbors + 5))[0]
-                    number_of_choises += 2
+                    connections = self.cgraph.get_top_connections(
+                        self.initial,number_of_neighbors)
+
+                    if not connections: continue
+
+                    destination = choice(connections)[0]
+
+                    number_of_choices += 2
                     print("\033[91mTEVE QUE REPETIR\033[0m")
                     repeated += 1
 
-                
-                number_of_choises -= 1
-                print(destination, number_of_choises)
+                number_of_choices -= 1
+                print(destination, number_of_choices)
 
             if len(self.cgraph.distance(self.initial, destination)) > 3:
                 return destination
@@ -107,7 +126,8 @@ class Game:
 
             # Evita personagens já visitados
             count: int = 0
-            characters: list[Character] = [neighbor[0] for neighbor in top_neighbors]
+            characters: list[Character] = [neighbor[0] for neighbor
+                                           in top_neighbors]
             for done in self.path:
                 if done in characters:
                     count += 1
@@ -126,12 +146,18 @@ class Game:
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
             print("Próximos do destino:")
-            for i, (name, score) in enumerate(self.cgraph.get_top_connections(self.destination), start=1):
+            destination_conns: list[tuple[Character, float]] = (
+                self.cgraph.get_top_connections(self.destination)
+            )
+
+            for i, (name, score) in enumerate(destination_conns, start=1):
                 print(f"{i:2}. {str(name):<20} {score:.3f}")
 
             shuffle(characters)
 
-            shortest: tuple[Character] | None = self.cgraph.distance(self.current, self.destination)
+            shortest: tuple[Character] | None = (
+                self.cgraph.distance(self.current, self.destination)
+            )
 
             if shortest and len(shortest) > 1:
                 if shortest[1] in characters:

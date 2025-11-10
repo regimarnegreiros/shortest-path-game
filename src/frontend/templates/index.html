@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shortest-path-game</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/pagina-inicial-estilo.css') }}">
 </head>
-<body class="play-body">
 
+<body class="play-body">
     <div class="container">
-       <h1 class="titulo-maneiro">
+        <h1 class="titulo-maneiro">
             <img src="../static/Icons/Shuriken-4-tips.png" alt="Icon" class="titulo-maneiro-icon">
-            GRAFO DO NARUTO 
+            GRAFO DO NARUTO
             <img src="../static/Icons/Shuriken-4-tips.png" alt="Icon" class="titulo-maneiro-icon">
         </h1>
-        
+
         <div class="regras">
             <h2 class="regras-titulo">
                 <img src="../static/Icons/lamen-contrastup.png" alt="Icon" class="regras-titulo-icon">
-                R EG R AS :</h2>
-            <p class = "regras-explicacao">
-                O objetivo do jogo é encontrar o caminho mais curto de relações entre dois personagens do universo de Naruto.
+                R EG R AS :
+            </h2>
+
+            <p class="regras-explicacao">
+                O objetivo do jogo é encontrar o caminho mais curto de relações entre dois personagens do universo de
+                Naruto.
             </p>
-             <p class = "regras-subcontainer">
+
+            <p class="regras-subcontainer">
                 <p class="regras-regras-individuais">
                     <img src="../static/Icons/uzumaki-lineonly.png" alt="Icon" class="regras-regras-individuais-icon">
                     Regra 1;
-                </p>   
+                </p>
+
                 <p class="regras-regras-individuais">
                     <img src="../static/Icons/uzumaki-lineonly.png" alt="Icon" class="regras-regras-individuais-icon">
                     Regra 2;
-                </p> 
-                 <p class="regras-regras-individuais">
+                </p>
+
+                <p class="regras-regras-individuais">
                     <img src="../static/Icons/uzumaki-lineonly.png" alt="Icon" class="regras-regras-individuais-icon">
                     Regra 3;
-                </p> 
+                </p>
             </p>
         </div>
-
-        <a href="/game" class="botao-play">J o g a r </a>
     </div>
-
+    
+    <a href="/game" class="botao-play">J o g a r </a>
 </body>
+
 </html>

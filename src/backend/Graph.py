@@ -156,7 +156,7 @@ class AbstractCharacterGraph(ABC):
 
         if not isinstance(start, (Character, int, str)):
             raise TypeError("invalid type for start character")
-        
+
         elif not isinstance(end, (Character, int, str)):
             raise TypeError("invalid type for end character")
 

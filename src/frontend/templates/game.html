@@ -1,56 +1,53 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>nome do game </title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/game-estilo.css') }}">
 </head>
+
 <body class="game-body">
-        <h class="outer-titulo">
-          <h2 class="titulo-maneiro">
-              <img src="../static/Icons/Shuriken-4-tips.png" alt="Icon" class="titulo-maneiro-icon">
-              GRAFO DO NARUTO 
-              <img src="../static/Icons/Shuriken-4-tips.png" alt="Icon" class="titulo-maneiro-icon">
-          </h2>
-        </h>
+    <h class="outer-titulo">
+        <h2 class="titulo-maneiro">
+            <img src="../static/Icons/Shuriken-4-tips.png" alt="Icon" class="titulo-maneiro-icon">
+            GRAFO DO NARUTO
+            <img src="../static/Icons/Shuriken-4-tips.png" alt="Icon" class="titulo-maneiro-icon">
+        </h2>
+    </h>
 
-<div class="board"> 
-    <img src="../static/images/pergaminho.png" alt="Icon" class="pergaminho-board">
-    <div class="div-Teste" id ="barra">
-        
-          <div class="char-display char-display-origem" id="origem"> </div>
-       
-          <div class="char-display char-display-destino" id="destino"> </div>
-
+    <div class="board">
+        <img src="../static/images/pergaminho.png" alt="Icon" class="pergaminho-board">
+        <div class="div-Teste" id="barra">
+            <div class="char-display char-display-origem" id="origem"> </div>
+            <div class="char-display char-display-destino" id="destino"> </div>
+        </div>
     </div>
-</div>
- <div class="outer-perga">
+    <div class="outer-perga">
+        <div class="perga-container">
+            <div class="div-Teste div-Teste-options">
+                <button class="char-display char-display-options"> </button>
+                <button class="char-display char-display-options"> </button>
+                <button class="char-display char-display-options"> </button>
+                <button class="char-display char-display-options"> </button>
+                <button class="char-display char-display-options"> </button>
+            </div>
+        </div>
 
-    <div class="perga-container">
-
-      <div class="div-Teste div-Teste-options">
-
-          <button class="char-display char-display-options" >  </button>
-          <button class="char-display char-display-options" >  </button>
-          <button class="char-display char-display-options" >  </button>   
-          <button class="char-display char-display-options" >  </button>   
-          <button class="char-display char-display-options" >  </button>   
-
-      </div>
+        <img src="../static/images/pergaminho-verde.png" alt="Icon" class="pergaminho-perga">
     </div>
-    
-    <img src="../static/images/pergaminho-verde.png" alt="Icon" class="pergaminho-perga">
- </div>
+
     <script src="{{ url_for('static', filename='js/front.js') }}" type="module"></script>
-    <!-- Modal de fim de jogo -->
-<div id="endGameModal" class="modal">
-  <div class="modal-content">
-    <h2 id="modalTitle">Fim de Jogo</h2>
-    <p id="modalMessage"></p>
-    <button id="modalButton" class="modal-btn">Jogar Novamente</button>
-  </div>
-</div>
 
+    <!-- Modal de fim de jogo -->
+    <div id="endGameModal" class="modal">
+        <div class="modal-content">
+            <h2 id="modalTitle">Fim de Jogo</h2>
+            <p id="modalMessage"></p>
+            <button id="modalButton" class="modal-btn">Jogar Novamente</button>
+        </div>
+    </div>
 </body>
+
 </html>
