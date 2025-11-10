@@ -71,7 +71,12 @@ class AbstractCharacterGraph(ABC):
             top_n: int = 10
         ) -> list[tuple[Character, float]] | None:
         """Encontra e lista as principais conexões de um personagem."""
-        target_character = self.search(target_character)
+
+        if not isinstance(target_character, (Character, int, str)):
+            raise TypeError("invalid type for target_character")
+
+        if isinstance(target_character, (str, int)):
+            target_character = self.search(target_character)
 
         if target_character not in self.graph:
             print(f"\nPersonagem '{target_character}' não encontrado no grafo.",
@@ -148,6 +153,21 @@ class AbstractCharacterGraph(ABC):
         Retorna a distância entre dois personagens como uma 
         tuple ordenada de personagens, caso haja um caminho entre eles
         """
+
+        if not isinstance(start, (Character, int, str)):
+            raise TypeError("invalid type for start character")
+        
+        elif not isinstance(end, (Character, int, str)):
+            raise TypeError("invalid type for end character")
+
+        if isinstance(start, (str, int)):
+            start = self.search(start)
+
+        if isinstance(end, (str, int)):
+            end = self.search(end)
+
+        if not start or not end:
+            return None
 
         type Table = dict[Character, tuple[float, Character | None, bool]]
 
