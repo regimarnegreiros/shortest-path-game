@@ -17,11 +17,11 @@ app.register_blueprint(api_bp, url_prefix="/api")
 
 # Rotas de páginas HTML
 @app.route("/")
-def index():
+def index() -> str:
     return render_template("index.html")
 
 @app.route("/game")
-def game():
+def game() -> str:
     return render_template("game.html")
 
 
