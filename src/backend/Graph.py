@@ -3,7 +3,8 @@ import json
 import networkx as nx
 from typing import Any
 from Character import Character
-from random import choices
+from random import choices, shuffle
+from itertools import groupby
 from sys import stderr
 from abc import ABC, abstractmethod
 from math import inf
@@ -90,6 +91,15 @@ class AbstractCharacterGraph(ABC):
         sorted_connections: list[tuple[Character, float]] = (
             sorted(character_connections, key=lambda item: item[1])
         )
+
+        # Aleatoriza por grupos de mesmo peso
+        groups: list[tuple[Character, float]] = []
+        for _, group in groupby(sorted_connections, key=lambda x: x[1]):
+            g: list[tuple[Character, float]] = list(group)
+            shuffle(g)
+            groups += g
+
+        sorted_connections = groups
 
         # Pega os top_n primeiros
         top_connections: list[tuple[Character, float]] = (
