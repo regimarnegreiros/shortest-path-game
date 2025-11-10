@@ -16,7 +16,7 @@
 
     align-items: center;
     justify-content: center;
-    height: 103px;
+    height: 93px;
     background-color: #e0d8be;
     margin: 1%;
     border-top: 12px solid #943428;
@@ -25,7 +25,7 @@
 .titulo-maneiro {
     color: #ef5c00; 
     font-family: 'naruto';
-    font-size: 50px;
+    font-size: 40px;
     text-shadow:
         -2px -2px 0 white,
         2px -2px 0 white,
@@ -40,11 +40,11 @@
 
     border-top: 10px dotted #303030;
     border-bottom: 10px dotted #313131;
-    padding: 3% 0%;
+    padding: 18px ;
 }
 .titulo-maneiro-icon{
-    width: 60px;
-    height: 60px;
+    width: 50px;
+    height: 50px;
     transform: translateY(8px);   
 }
 
@@ -327,58 +327,58 @@
 
 /* ==================== MODAL ==================== */
 .modal {
-  display: none; /* começa invisível */
-  position: fixed;
-  z-index: 999;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(3px);
-  justify-content: center;
-  align-items: center;
-  animation: fadeIn 0.4s ease forwards;
+    display: none; /* começa invisível */
+    position: fixed;
+    z-index: 999;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(3px);
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.4s ease forwards;
 }
 
 .modal-content {
-  background-color: #fff;
-  border: 4px solid #FF7F50;
-  border-radius: 15px;
-  padding: 40px 60px;
-  text-align: center;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
-  animation: popUp 0.5s ease forwards;
-  font-family: 'sans_undertale';
+    background-color: rgb(213, 207, 179);
+
+    border: 12px solid rgb(142, 52, 52) ;  border-radius: 0px;
+    padding: 40px 60px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    animation: popUp 0.5s ease forwards;
+    font-family: 'manga';
 }
 
 .modal-content h2 {
-  font-family: 'naruto';
-  color: #FF7F50;
-  margin-bottom: 15px;
-  font-size: 40px;
+    font-family: 'shuriken';
+    color: #131313;
+    margin-bottom: 15px;
+    font-size: 40px;
 }
 
 .modal-content p {
-  font-size: 20px;
-  margin-bottom: 30px;
+    font-size: 20px;
+    margin-bottom: 30px;
 }
 
 .modal-btn {
-  background-color: #FF7F50;
-  color: #fff;
-  border: none;
-  padding: 12px 25px;
-  border-radius: 8px;
-  font-size: 18px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'sans_undertale';
+    background-color: rgb(213, 207, 179);
+    color: #000000;
+    border: 8px solid rgb(142, 52, 52) ;  border-radius: 0px;
+    padding: 12px 25px;
+    border-radius: 0px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'shuriken';
 }
 
 .modal-btn:hover {
-  background-color: #e66a3d;
-  transform: scale(1.05);
+    background-color: #e66a3d;
+    transform: scale(1.05);
 }
 
 @keyframes fadeIn {
