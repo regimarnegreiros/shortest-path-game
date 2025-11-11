@@ -16,16 +16,16 @@
 
     align-items: center;
     justify-content: center;
-    height: 93px;
+    height: 83px;
     background-color: #e0d8be;
-    margin: 1%;
+    margin-bottom: 2%;
     border-top: 12px solid #943428;
     border-bottom: 12px solid #943428;
 }
 .titulo-maneiro {
     color: #ef5c00; 
     font-family: 'naruto';
-    font-size: 40px;
+    font-size: 30px;
     text-shadow:
         -2px -2px 0 white,
         2px -2px 0 white,
@@ -43,8 +43,9 @@
     padding: 18px ;
 }
 .titulo-maneiro-icon{
-    width: 50px;
-    height: 50px;
+    width: 40px;
+    height: 40px;
+    margin-left: 7px;
     transform: translateY(8px);   
 }
 
@@ -70,8 +71,8 @@
     justify-content: center ;
     align-items: center;
     background-color: #e0d8be;
-    height: 226px;
-    margin-bottom: 30px;
+    height: 190px;
+    margin-bottom: 2%;
     border-top: 18px solid rgb(151, 126, 103) ;
     border-bottom: 18px solid rgb(151, 126, 103) ;
     border-right: 18px solid rgb(151, 126, 103) ;
@@ -84,8 +85,9 @@
 .pergaminho-board{
     align-self: left ;
     width: 90px;
-    height: 295px;
-    transform: translateX(-10px);   
+    height: 252px;
+    transform: translateX(-20px);   
+    margin-top: 9px;
 }
 .div-Teste {
     display: flex;
@@ -95,8 +97,9 @@
 
     min-width: 60%;
     height: 225px;
-    margin-left: 2%;
-    margin-right: 2%;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: 0;
 }
 .div-Teste-options {
 
@@ -104,7 +107,17 @@
     justify-content: space-between;
 
     min-width: 30%;
-    margin: 2%;
+    margin-bottom: 35px;
+}
+.div-Teste-outer{
+    display: flex;
+    flex-direction: column;
+
+}
+.div-Teste-Cima{
+    height: 0;
+    height: 150px;
+    margin-top: -10px;
 }
 
 /*#=============================================#*/
@@ -117,16 +130,15 @@
     justify-content: right;
     min-width: 630px;
 }
+
+.perga-mid-options{
+    color: #303030;
+    margin-top: 15px;
+    font-size: 19px;
+    font-family: "shuriken";
+}
 .perga-container {
-    min-width: 460px;
-    height: 200px;
     background-color: rgb(213, 207, 179);
-    display: flex;
-    
-    align-items: center;
-    justify-content: center;
-    transition: all 0.6s ease;
-    transform-origin: right;
 
     border-top: 18px solid rgb(142, 52, 52) ;
     border-bottom: 18px solid rgb(142, 52, 52) ;
@@ -136,13 +148,22 @@
         -2px 0 0px rgb(41, 41, 41),
         0px -2px 0px rgb(41, 41, 41);
 
+    min-width: 460px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+    transition: all 0.6s ease;
+    transform-origin: right;
+    
 }
 .pergaminho-perga{
-    width: 110px;
-    height: 260px;
+    width: 80px;
+    height: 205px;
     transform: translateX(-30px);  
-    
- 
+    margin-top: 8px;
 }
 .perga-container.fecha {
     transform: scaleX(0.01);
@@ -166,15 +187,17 @@
     background-color: #bbc1c2;
     border-radius: 5px;
     box-shadow: 0px 8px 5px rgb(99, 99, 99);
-    height: 100px;
-    width: 100px;
+    height: 80px;
+    width: 80px;
     border: 2px solid #000000;
     align-items: center;
     justify-content: center;
-    padding: 10px;
-}
+    padding: 5px;
+    align-items: center;
+}    
 
 .char-display-origem{ /*DISPLAY PERSONAGEM DE ORIGEM*/
+    
     background-color: #545454;
     border-left: 
         7px solid #8b8b8b;
@@ -185,6 +208,26 @@
     border-right: 
         7px solid #313131;
     margin-right: 25px;
+}
+.char-origem-titulo{    
+    color: #303030;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    font-size: 14px;
+    font-family: "shuriken";
+    margin-top: 0px;
+}
+
+.title-destino{
+    margin: auto;
+    margin-right: 40px;
+
+}
+.title-origem{
+    justify-self: flex-start;
+    margin-left: 40px;
+
 }
 .char-display-destino{/*DISPLAY PERSONAGEM DE DESTINO*/
     background-color: #d8ba4f;
@@ -202,24 +245,24 @@
 }
 .char-display-options { /*DISPLAY DOS PERSONAGENS DAS OPTIONS*/
 
-    height: 100px;
-    width: 100px;
-    margin-left: -15px;
-    margin-right: -15px;
+    height: 80px;
+    width: 80px;
+    margin-left: -10px;
+    margin-right: -10px;
     flex-direction: row;
     z-index: 1;
     transition: all 0.25s ease;
     border: 3px solid #ffffff;
     
     border-left: 
-        7px solid #dadada;
+        6px solid #dadada;
     border-top: 
-        7px solid #ffffff;
+        6px solid #ffffff;
     border-bottom: 
-        7px solid #70737c;
+        6px solid #70737c;
     border-right: 
-        7px solid #70737c;
-
+        6px solid #70737c;
+    
 }
 
 .char-display img {/*DISPLAY DE IMAGEM MAIN*/
@@ -229,13 +272,13 @@
     border-radius: 50%;
     
     border-left: 
-        6px solid #7b7d7e;
+        4px solid #7b7d7e;
     border-top: 
-        6px solid #7b7d7e;
+        4px solid #7b7d7e;
     border-bottom: 
-        6px solid #eceffa;
+        4px solid #eceffa;
     border-right: 
-        6px solid #edf1ff;
+        4px solid #edf1ff;
 }
 .char-display-destino img{ /*IMAGEM ORIGEM*/
     border-left: 
@@ -260,7 +303,7 @@
 
 .char-display p {
     font-weight: bold;
-    font-size: 18px;
+    font-size: 14px;
     color: #333;
     padding: 5px;
     text-align: center;
@@ -287,7 +330,7 @@
     padding: 3px 6px;
 
     font-family: 'manga' ;
-    font-size: 10px;
+    font-size: 8px;
     font-weight: bold;
 
     border-left: 
