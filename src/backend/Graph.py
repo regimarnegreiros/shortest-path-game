@@ -5,7 +5,7 @@ from typing import Any
 from Character import Character
 from random import choices, shuffle
 from itertools import groupby
-from sys import stderr
+from sys import stderr, exit
 from abc import ABC, abstractmethod
 from math import inf
 

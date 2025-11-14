@@ -1,5 +1,7 @@
 from flask import Flask, render_template
+from webbrowser import open as wbopen
 from routes import api_bp
+from threading import Thread
 import os, uuid
 
 # Criação do app Flask com suporte aos templates e arquivos estáticos
@@ -26,4 +28,5 @@ def game() -> str:
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    wbopen("http://127.0.0.1:5000")
+    app.run(debug=True, use_reloader=False)
