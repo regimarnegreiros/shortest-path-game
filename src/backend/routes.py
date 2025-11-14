@@ -79,7 +79,7 @@ def get_options() -> Response | tuple[Response, int]:
 
     # Verificação de game_over para impedir opções após o fim
     if game.game_over:
-        state_msg: str = "Vitória" if game.win else "Derrota"
+        state_msg: str = "Vitoria" if game.win else "Derrota"
 
         return jsonify({"error": f"O jogo já terminou: {state_msg}"}), 400
 
