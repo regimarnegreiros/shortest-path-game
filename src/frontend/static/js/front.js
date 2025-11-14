@@ -174,9 +174,9 @@ function showEndGameModal(win) {
     const message = document.getElementById("modalMessage");
     const button = document.getElementById("modalButton");
 
-    title.textContent = win ? "Vitória!" : "Derrota...";
+    title.textContent = win ? "Vitoria!" : "Derrota...";
     message.textContent = win
-        ? "Você alcançou o destino! "
+        ? "Voce alcancou o destino! "
         : "Seu caminho chegou ao fim.";
 
     modal.style.display = "flex";
