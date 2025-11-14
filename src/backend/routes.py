@@ -57,7 +57,7 @@ def start_game() -> Response:
     game_id: str = str(uuid.uuid4())
 
     # Cria uma nova instância de jogo
-    new_game: Game = Game(character_graph, 30)
+    new_game: Game = Game(character_graph, 15)
 
     # Armazena a instância no dicionário de jogos ativos
     ACTIVE_GAMES[game_id] = new_game
@@ -79,7 +79,7 @@ def get_options() -> Response | tuple[Response, int]:
 
     # Verificação de game_over para impedir opções após o fim
     if game.game_over:
-        state_msg: str = "Vitória" if game.win else "Derrota"
+        state_msg: str = "Vitoria" if game.win else "Derrota"
 
         return jsonify({"error": f"O jogo já terminou: {state_msg}"}), 400
 

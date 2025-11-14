@@ -239,6 +239,7 @@ class CharacterGraph(AbstractCharacterGraph):
             character for character in self.characters_data
             if "Boruto" not in (character.get('debut', {}).get('anime', ''))
             and "name" in character
+            and "Anime" in character.get('debut', {}).get("appearsIn", "")
         ]
         # Adiciona nós
         for character in self.characters_data:
@@ -388,6 +389,9 @@ if __name__ == "__main__":
     # Exemplo: Obtém as 10 principais conexões de um personagem
     top = character_graph.get_top_connections('Kabuto Yakushi')
     print(character_graph.distance("Naruto Uzumaki", "Mitsuo"))
+
+    print("nos:", len(character_graph.graph.nodes))
+    print("arestas:", len(character_graph.graph.edges))
 
     for i, (name, score) in enumerate(top, start=1):
         print(f"{i:2}. {str(name):<20} {score:.3f}")
